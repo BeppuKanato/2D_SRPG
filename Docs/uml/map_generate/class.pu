@@ -1,0 +1,136 @@
+@startuml map_generate_class
+title マップ生成機能 クラス図
+
+left to right direction
+
+enum TileType {
+    GRASS
+    THICKET
+    FOREST
+    CATSLE
+    SAND
+    WATER
+    WALL
+}
+
+class MapManager {
+    -MapInfo map_info
+    -TileFactory tile_factory
+    -CSVHandler csv_handler
+    -Tile[,] map_tiles
+
+    +ReadMapData(): List<int[]>
+    +InitializeMap(): void
+    +GetTileData(Vector2Int pos): Tile
+    +UpdateMapData(Dictionary<Vector2Int, int>): void 
+    +IsInBounds(Vector2Int pos): bool
+    +RefreshMapDisplay(): void
+}
+
+class TileFactory {
+    -TileTypePrefabPair[] tile_pairs
+    -Dictionary<TileType, GameObject> tile_prefabs
+
+    +InstantiateTile(TileType tile_type, Vector2 pos, Quaternion rotation): Tile
+}
+
+struct TileTypePrefabPair {
+    +TileType type
+    +GameObject prefab
+}
+
+TileFactory +-- TileTypePrefabPair
+
+class MonoBehavior {
+
+}
+
+class ScriptableObject {
+
+}
+
+class CSVHandler {
+    +async WriteCSV(TextAsset csv_file, List<string[]> write_data): bool
+    +async ReadCSV(TextAsset csv_file): ReadResult
+}
+
+struct ReadResult {
+    +bool is_success
+    +List<string[]> read_data
+    +string error_message
+}
+
+CSVHandler +-- ReadResult
+
+class MapInfo {
+    +string csv_file_name {get; private set;}
+    +int width {get; private set;}
+    +int height {get; private set;}
+    +Vector2Int[] initial_pos_ally {get; private set;}
+    +Vector2Int[] initial_pos_enemy {get; private set;}
+}
+
+abstract Tile {
+    #TileType _tile_type
+    +string _name { get; protected set; }
+    +int _move_cost { get; protected set; }
+    +int _avo_increase { get; protected set; }
+    +int _hp_recover { get; protected set; }
+
+    +GetCanMove(): bool
+} 
+
+note right of Tile::GetCanMove
+    引数のユニットクラスがタイルを移動可能かを返す
+end note
+
+class Grass {
+
+}
+
+class Thicket {
+
+}
+
+class Fortress {
+
+}
+
+class Catsle {
+
+}
+
+class Sand {
+
+}
+
+class Forest {
+
+}
+
+class Water {
+
+}
+
+class Wall{
+
+}
+
+MapManager --> CSVHandler
+MapManager --> TileFactory
+MapManager --> Tile
+
+MapInfo --|> ScriptableObject
+
+Tile --|> MonoBehavior
+Grass --|> Tile
+Thicket --|> Tile
+Fortress --|> Tile
+Catsle --|> Tile
+Sand --|> Tile
+Forest --|> Tile
+Wall --|> Tile
+Water --|> Tile
+
+
+@enduml

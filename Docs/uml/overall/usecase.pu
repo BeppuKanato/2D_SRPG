@@ -1,0 +1,56 @@
+@startuml usecase_2d_srpg
+title 2D SRPG システム全体のユースケース
+
+left to right direction
+
+actor ユーザー as user
+
+package "フィールド" {
+    usecase "フィールド移動" as move
+    usecase "行動選択" as action_select
+    usecase "アイテム選択" as item_select
+    usecase "対象選択" as target_select
+    usecase "行動終了" as action_end
+    usecase "ターン終了" as turn_end
+
+    action_select <|-- (攻撃)
+    action_select <|-- (アイテム使用)
+}
+
+package "出撃準備"  {
+    usecase "出撃ユニット選択" as unit_select
+    usecase "装備管理" as equipment_manage
+    usecase "ゲーム開始" as game_start
+}
+
+package "ストーリー" {
+    usecase "テキスト表示" as sentence_show
+    usecase "次の文に進む" as sentence_next
+    usecase "ストーリースキップ" as story_skip
+}
+
+package "データ管理" {
+    usecase "セーブ" as save
+    usecase "ロード" as load
+}
+
+user -- move
+user -- action_select
+user -- item_select
+user -- target_select
+user -- action_end
+
+user -- unit_select
+user -- equipment_manage
+user -- game_start
+
+user -- sentence_show
+user -- sentence_next
+user -- story_skip
+
+user -- save
+user --load
+
+
+
+@enduml

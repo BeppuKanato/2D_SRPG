@@ -1,0 +1,28 @@
+@startuml map_generate_sequence
+title マップ生成機能 シーケンス図
+
+participant MapManager
+participant CSVHandler
+participant TileFactory
+participant MapInfo
+
+MapManager -> MapInfo : マップのCSVファイル名を要求
+MapInfo -> MapManager : マップのCSVファイル名を返却
+MapManager -> CSVHandler : マップのデータを要求
+CSVHandler -> MapManager : マップの配列データを返却
+alt 読み込み成功
+    MapManager -> MapInfo : マップのサイズを要求
+    MapInfo -> MapManager : マップのサイズを返却
+    loop タイルを全て表示するまで
+        MapManager -> TileFactory : タイルのインスタンス化を要求
+        alt TileTypeが有効
+            TileFactory -> MapManager : タイルオブジェクトを返却
+        else TileTypeが無効
+            TileFactory -> TileFactory : エラーログを出力
+        end
+    end
+else 読み込み失敗
+    MapManager -> MapManager : エラー表示
+end
+
+@enduml

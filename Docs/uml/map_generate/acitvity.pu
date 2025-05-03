@@ -1,0 +1,23 @@
+@startuml map_generate_activity
+title マップ生成 アクティビティ図
+
+start
+:CSV読み込み;
+if (正常に読み込んだか?) then (yes)
+else (no)
+    :エラー内容を表示;
+    end
+endif
+:マップデータをパース(文字→数値);
+:マップサイズを取得;
+repeat
+    :TileTypeを取得;
+    :TileFactoryにインスタンス化要求;
+    if (TileTypeが有効か?) then (yes)
+        :タイルをインスタンス化;
+    else (no)
+        :ログ出力;
+    endif
+repeat while (残りのタイルあり?)
+stop
+@enduml

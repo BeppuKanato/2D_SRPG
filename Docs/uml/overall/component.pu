@@ -1,0 +1,21 @@
+@startuml component_2d_srpg
+title 2D SRPG コンポーネント図（簡易版）
+
+package "UI" {
+  [FieldUI]
+  [PrepUI]
+  [StoryUI]
+  [MenuUI]
+}
+
+[GameManager] --> [FieldSystem]
+[GameManager] --> [PreparationSystem]
+[GameManager] --> [StorySystem]
+[GameManager] --> [DataManager]
+
+[FieldSystem] --> [FieldUI]
+[PreparationSystem] --> [PrepUI]
+[StorySystem] --> [StoryUI]
+[DataManager] --> [MenuUI]
+
+@enduml
