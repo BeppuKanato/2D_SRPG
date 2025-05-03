@@ -113,19 +113,19 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 131
-        width: 30
-        height: 28
+        y: 128
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d6a80a4e4506cdbe0800000000000000
-      internalID: -1451179062190896531
+      spriteID: f35444c6bdca214419e313193c1d77d8
+      internalID: 1930376262
       vertices: []
       indices: 
       edges: []
@@ -135,19 +135,19 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
-        y: 131
-        width: 30
-        height: 28
+        y: 128
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e6bb8417f272703a0800000000000000
-      internalID: -6699342835972785298
+      spriteID: ba79c669b742e4a45885598b09b0ddeb
+      internalID: 1548920541
       vertices: []
       indices: 
       edges: []
@@ -157,19 +157,19 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 65
-        width: 64
-        height: 64
+        y: 96
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 71085108c30936ac0800000000000000
-      internalID: -3863085465832423401
+      spriteID: b90617d652fe7f44498866dff7aa7dde
+      internalID: 1958032145
       vertices: []
       indices: 
       edges: []
@@ -178,20 +178,152 @@ TextureImporter:
       name: '[A]Grass3_pipo_3'
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 64
-        height: 66
+        x: 32
+        y: 96
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 17006bf46b38027b0800000000000000
-      internalID: -5251052346469384079
+      spriteID: af4334a91fb5ae740a5fbf07a255658c
+      internalID: -346117839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: '[A]Grass3_pipo_4'
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5979a968d8271e4996eedafa90a9682
+      internalID: 662717312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: '[A]Grass3_pipo_5'
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af240261822ac8448a43a8657ef87913
+      internalID: 1778811349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: '[A]Grass3_pipo_6'
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa9631161aae21e468e22a3e8186007f
+      internalID: 1228097333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: '[A]Grass3_pipo_7'
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a469f2dbbad023a478848c46cfcacf16
+      internalID: -1290134826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: '[A]Grass3_pipo_8'
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34c383993b8f65e47ade5fe2945c44db
+      internalID: -697374386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: '[A]Grass3_pipo_9'
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c70e2641ec6924b44a147765728e717f
+      internalID: -559741439
       vertices: []
       indices: 
       edges: []
@@ -200,7 +332,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: e933ef368ab0eee48be388711d405032
     internalID: 0
     vertices: []
     indices: 
@@ -209,7 +341,17 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      '[A]Grass3_pipo_0': 1930376262
+      '[A]Grass3_pipo_1': 1548920541
+      '[A]Grass3_pipo_2': 1958032145
+      '[A]Grass3_pipo_3': -346117839
+      '[A]Grass3_pipo_4': 662717312
+      '[A]Grass3_pipo_5': 1778811349
+      '[A]Grass3_pipo_6': 1228097333
+      '[A]Grass3_pipo_7': -1290134826
+      '[A]Grass3_pipo_8': -697374386
+      '[A]Grass3_pipo_9': -559741439
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
