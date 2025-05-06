@@ -4,6 +4,8 @@ using System.Collections.Generic;
 public class TileFactory : MonoBehaviour
 {
     [SerializeField]
+    Transform field_parent;
+    [SerializeField]
     private TileTypePrefabPair[] tile_pairs;
     private Dictionary<TileType, GameObject> tile_prefabs = new Dictionary<TileType, GameObject>();
 
@@ -25,6 +27,7 @@ public class TileFactory : MonoBehaviour
     public Tile InstantiateTile(TileType tile_type, Vector2 pos, Quaternion rotation)
     {
         GameObject tile_obj = Instantiate(tile_prefabs[tile_type], pos, rotation);
+        tile_obj.transform.SetParent(field_parent);
         return tile_obj.GetComponent<Tile>();
     }
     [System.Serializable]

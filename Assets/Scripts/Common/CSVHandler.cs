@@ -28,10 +28,16 @@ public class CSVHandler
             
             return result;
         }
+
         List<string[]> read_data = new List<string[]>();
         string[] lines = csv_text_asset.text.Split("\n");
         foreach (string line in lines)
         {
+            //‹ó•¶šAnull‚Ìê‡ˆ—‚µ‚È‚¢
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                continue;
+            }
             string[] values = line.Split(",");
             read_data.Add(values);
         }

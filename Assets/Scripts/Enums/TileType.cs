@@ -1,11 +1,11 @@
 public enum TileType
 {
-    GRASS = 001,    //ëêå¥
-    THICKET = 002,  //ÇµÇ∞Ç›
-    FOREST = 003,   //êX
-    SAND = 004,     //çª
-    WATER = 005,    //êÖ
-    WALL = 006,     //ï«
+    GRASS = 1,    //ëêå¥
+    THICKET = 2,  //ÇµÇ∞Ç›
+    FOREST = 3,   //êX
+    SAND = 4,     //çª
+    WATER = 5,    //êÖ
+    WALL = 6,     //ï«
 
     CASTLE_LEFT_TOP = 101, //èÈÇÃç∂è„
     CASTLE_RIGHT_TOP = 102, //èÈÇÃâEè„
