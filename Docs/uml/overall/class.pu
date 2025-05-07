@@ -4,13 +4,20 @@ title マップ生成機能 クラス図
 left to right direction
 
 enum TileType {
-    GRASS
-    THICKET
-    FOREST
-    CATSLE
-    SAND
-    WATER
-    WALL
+    GRASS = 1
+    THICKET = 2
+    FOREST = 3
+    SAND = 4
+    WATER = 5
+    WALL = 6
+
+    CASTLE_LEFT_TOP = 101
+    CASTLE_RIGHT_TOP = 102
+    CASTLE_LEFT_BOTTOM = 103
+    CASTLE_RIGHT_BUTTON = 104
+
+    CITY_LEFT = 111
+    CITY_RIGHT = 112
 }
 
 class MapManager {
@@ -19,8 +26,8 @@ class MapManager {
     -CSVHandler csv_handler
     -Tile[,] map_tiles
 
-    +ReadMapData(): List<int[]>
-    +InitializeMap(): void
+    +ReadMapData(): int[,]
+    +MapDisplay(): void
     +GetTileData(Vector2Int pos): Tile
     +UpdateMapData(Dictionary<Vector2Int, int>): void 
     +IsInBounds(Vector2Int pos): bool
@@ -50,8 +57,8 @@ class ScriptableObject {
 }
 
 class CSVHandler {
-    +async WriteCSV(TextAsset csv_file, List<string[]> write_data): bool
-    +async ReadCSV(TextAsset csv_file): ReadResult
+    +async WriteCSV(string csv_file, List<string[]> write_data): WriteResult
+    +async ReadCSV(string csv_file): ReadResult
 }
 
 struct ReadResult {
@@ -60,7 +67,13 @@ struct ReadResult {
     +string error_message
 }
 
+struct WriteResult {
+    +bool is_success
+    +string error_message
+}
+
 CSVHandler +-- ReadResult
+CSVHandler +-- WriteResult
 
 class MapInfo {
     +string csv_file_name {get; private set;}
@@ -71,11 +84,11 @@ class MapInfo {
 }
 
 abstract Tile {
-    #TileType _tile_type
-    +string _name { get; protected set; }
-    +int _move_cost { get; protected set; }
-    +int _avo_increase { get; protected set; }
-    +int _hp_recover { get; protected set; }
+    #TileType tile_type
+    +string tile_name { get; protected set; }
+    +int move_cost { get; protected set; }
+    +int avo_increase { get; protected set; }
+    +int hp_recover { get; protected set; }
 
     +GetCanMove(): bool
 } 
