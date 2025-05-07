@@ -188,3 +188,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 761ad1bbe4e3dab42b79a68d52f64275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <tile_type>k__BackingField: 2
+  <tile_name>k__BackingField: "\u3057\u3052\u307F"
+  <move_cost>k__BackingField: 1
+  <avo_increase>k__BackingField: 30
+  <hp_recover>k__BackingField: 0

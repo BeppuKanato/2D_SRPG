@@ -389,8 +389,6 @@ MonoBehaviour:
     <prefab>k__BackingField: {fileID: 2128245552775155264, guid: 440627cb4e7645246995d5cc28502d8f, type: 3}
   - <type>k__BackingField: 2
     <prefab>k__BackingField: {fileID: 2376114736802764139, guid: 1c4d6aa21ca244a4abd716e636f07a15, type: 3}
-  - <type>k__BackingField: 2
-    <prefab>k__BackingField: {fileID: 2376114736802764139, guid: 1c4d6aa21ca244a4abd716e636f07a15, type: 3}
 --- !u!4 &1081771695
 Transform:
   m_ObjectHideFlags: 0
@@ -470,6 +468,8 @@ MonoBehaviour:
   sprite_height: 1
   map_info: {fileID: 11400000, guid: f02d3171046f47643b981f5502f2c016, type: 2}
   tile_factory: {fileID: 1081771694}
+  is_debug_mode: 0
+  change_type: 1
 --- !u!4 &1302182731
 Transform:
   m_ObjectHideFlags: 0
