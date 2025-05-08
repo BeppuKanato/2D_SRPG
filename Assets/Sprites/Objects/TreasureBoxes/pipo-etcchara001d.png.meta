@@ -259,7 +259,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      pipo-etcchara001d_0: -5876103412445891814
+      pipo-etcchara001d_1: -4178801092160396356
+      pipo-etcchara001d_2: 4972378018731972166
+      pipo-etcchara001d_3: -4657182009291484234
+      pipo-etcchara001d_4: 2046372739394073647
+      pipo-etcchara001d_5: -2707355436308419041
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

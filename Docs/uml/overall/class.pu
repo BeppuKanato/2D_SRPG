@@ -1,5 +1,5 @@
-@startuml map_generate_class
-title マップ生成機能 クラス図
+@startuml 2d_srpg_class
+title 2DSRPG クラス図
 
 left to right direction
 
@@ -18,6 +18,77 @@ enum TileType {
 
     CITY_LEFT = 111
     CITY_RIGHT = 112
+}
+
+class Unit {
+    +string name {get; private set;}
+    +int curret_hp {get; private set;}
+    +Vector2Int pos {get; private set;}
+    +UnitStatus status {get; private set;}
+    +UnitClass class {get; private set;}
+    +bool is_alive {get; privaate set;}
+    +bool is_selected {get; private set;}
+    +bool has_moved {get; private set;}
+    +Sprite icon {get; private set;}
+    +int level {get; private set;}
+
+    +GridMove(Vector2 target_pos): void
+}
+
+class AllyUnit {
+    +UnitGrowthRate growth_rate {get; private set;}
+    +int exp {get; private set;}
+}
+
+class EnemyUnit {
+    +int base_exp_amount {get; private set;}
+    +AIType ai_type {get; private set;}
+
+    +MoveAgent(): void
+}
+
+enum AIType {
+    IDLE
+    REACTIVE
+    AGGRESSIVE
+}
+
+class UnitStatus {
+    +int max_hp {get; private set;}
+    +int str {get; private set;}
+    +int m_power {get; private set;}
+    +int tec {getl private set;}
+    +int agi {get; private set;}
+    +int def {get; private set;}
+    +int m_def {get; private set;}
+    +int luck {get; private set;}
+    +int physique {get; private set;}
+}
+
+class UnitGrowthRate {
+    +int hp_rate {get; private set;}
+    +int str_rate {get; private set;}
+    +int m_power_rate {get; private set;}
+    +int tec_rate {get; private set;}
+    +int agi_rate {get; private set;}
+    +int def_rate {get; private set;}
+    +int m_def_rate {get; private set;}
+    +int luck_rate {get; private set;}
+    +int physique_rate {get; private set;}
+}
+
+class UnitClass {
+    +string class_name
+    +int move_cost {get; private set;}
+    +Sprite icon {get; private set;}
+}
+
+class UnitUpperClass {
+
+}
+
+class UnitLowerClass {
+
 }
 
 class MapManager {
@@ -128,6 +199,14 @@ class Water {
 class Wall{
 
 }
+
+Unit --|> MonoBehavior
+UnitClass --|> ScriptableObject
+UnitStatus --|> ScriptableObject
+AllyUnit --|> Unit
+EnemyUnit --|> Unit
+UnitUpperClass --|> UnitClass
+UnitLowerClass --|> UnitClass
 
 MapManager --> CSVHandler
 MapManager --> TileFactory
