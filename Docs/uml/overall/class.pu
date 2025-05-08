@@ -32,12 +32,20 @@ class Unit {
     +Sprite icon {get; private set;}
     +int level {get; private set;}
 
-    +GridMove(Vector2 target_pos): void
+    +GridMove(Vector2 target_pos, Vector2Int target_grid_pos): void
+    +GetMoveableArea(Tile[,] tile_map, int map_width, int map_height): List<Vector2Int>
+    +Select(): void
+    +DeSelect(): void
+    +ResetTurnState(): void
+    +TakeDamege(): void
 }
 
 class AllyUnit {
     +UnitGrowthRate growth_rate {get; private set;}
     +int exp {get; private set;}
+    +GainExp(int exp_amount): void
+    +LevelUp(): void
+    +ClassPromote(): void
 }
 
 class EnemyUnit {
@@ -88,7 +96,7 @@ class UnitUpperClass {
 }
 
 class UnitLowerClass {
-
+    +UnitUpperClass promotable_class {get; private set;}
 }
 
 class MapManager {
