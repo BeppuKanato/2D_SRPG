@@ -20,6 +20,32 @@ enum TileType {
     CITY_RIGHT = 112
 }
 
+class Item {
+    +string name {get; private set;}
+    +bool priceless {get; private set;}
+    +int sale_price {get; private set;}
+    +int buying_price {get; private set;}
+    +Sprite icon {get; private set;}
+}
+
+class Weapon {
+    +int[] ranges {get; private set;}
+    +int power  {get; private set;}
+    +WeponType wepon_type {get; private set;}
+
+    +ExtraEffect(): void
+}
+
+enum WeaponTpye {
+    MAGIC
+    PHYSICS
+}
+
+class ItemInstance {
+    +Item item {get; private set;}
+    +int count {get; private set;}
+}
+
 class Unit {
     +string name {get; private set;}
     +int curret_hp {get; private set;}
@@ -31,13 +57,16 @@ class Unit {
     +bool has_moved {get; private set;}
     +Sprite icon {get; private set;}
     +int level {get; private set;}
+    +Weapon equip_wepon {get; private set;}
+    +List<Weapon> have_weapons {get; private set;}
+    +List<ItemInstance> have_items {get; private set;}
 
     +GridMove(Vector2 target_pos, Vector2Int target_grid_pos): void
     +GetMoveableArea(Tile[,] tile_map, int map_width, int map_height): List<Vector2Int>
     +Select(): void
     +DeSelect(): void
     +ResetTurnState(): void
-    +TakeDamege(): void
+    +TakeDamege(int amount): void
 }
 
 class AllyUnit {
@@ -207,6 +236,9 @@ class Water {
 class Wall{
 
 }
+
+Item --|> ScriptableObject
+Wepon --|> Item
 
 Unit --|> MonoBehavior
 UnitClass --|> ScriptableObject
