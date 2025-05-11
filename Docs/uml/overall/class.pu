@@ -20,30 +20,90 @@ enum TileType {
     CITY_RIGHT = 112
 }
 
-class Item {
+enum ItemTargetType {
+    MYSELF
+    UNIT
+    TILE
+}
+
+abstract Item {
     +string name {get; private set;}
     +bool priceless {get; private set;}
     +int sale_price {get; private set;}
     +int buying_price {get; private set;}
     +Sprite icon {get; private set;}
+    +ItemTargetType target_type {get; private set;}
+
+    +abstract Use(object targets): void
 }
+
+Item +-- ItemTargetType
+
+class WeaponTypeAffinity {
+    +Dictionary<WeaponType, List<WeaponType>> strongAgainst
+    +Dictionary<WeaponType, List<WeaponType>> weakAgainst
+    +IsStrongAgainst(attacker: WeaponType, defender: WeaponType): bool
+    +IsWeakAgainst(attacker: WeaponType, defender: WeaponType): bool
+}
+
 
 class Weapon {
     +int[] ranges {get; private set;}
     +int power  {get; private set;}
-    +WeponType wepon_type {get; private set;}
+    +WeaponType weapon_type {get; private set;}
+    +WeaponCategory weapon_category {get; private set;}
 
-    +ExtraEffect(): void
+    +override Use(object targets): void
 }
 
-enum WeaponTpye {
-    MAGIC
-    PHYSICS
+enum WeaponCategory {
+    PHYSICAL
+    MAGICAL
 }
+
+enum WeaponType {
+    SWORD
+    LANCE
+    AXE
+    REASON
+    LIGHT
+    DARK
+}
+
+Weapon +-- WeaponType
+Weapon +-- WeaponCategory
+
+enum ActionType {
+    ATTACK
+    HEAL
+    WAIT
+}
+
+interface IUnitAction {
+    +ActionType action_type {get; private set;}
+    +string action_name {get; protected set;}
+    +CanExecute(Unit exec_unit, object target): bool
+    +Execute(Unit exec_unit, object taraget): void
+}
+
+IUnitAction +-- ActionType
+IUnitAction --> ActionType
+
+class AttackAction {
+}
+
+class HealAction {
+}
+
+class WaitAction {
+}
+
 
 class ItemInstance {
     +Item item {get; private set;}
     +int count {get; private set;}
+
+    +Use(): void
 }
 
 class Unit {
@@ -60,13 +120,21 @@ class Unit {
     +Weapon equip_wepon {get; private set;}
     +List<Weapon> have_weapons {get; private set;}
     +List<ItemInstance> have_items {get; private set;}
+    +List<IUnitAction> available_actions {get; private set;}
+    +List<Tile> moveable_tiles {get; private set;}
+    +List<Tile> in_range_tiles {get; private set;}
 
     +GridMove(Vector2 target_pos, Vector2Int target_grid_pos): void
-    +GetMoveableArea(Tile[,] tile_map, int map_width, int map_height): List<Vector2Int>
+    +virtual GetMoveableArea(Tile[,] tile_map, int map_width, int map_height): List<Vector2Int>
+    +SearchMoveableArea(Tile[,] tile_map, int map_width, int map_height): void
+    +SearchInRangeTiles(Tile[,] tile_map, int map_width, int map_height): void
+
     +Select(): void
     +DeSelect(): void
     +ResetTurnState(): void
     +TakeDamege(int amount): void
+    +Heal(int amount): void
+    +UpdateAvailableActions(): void
 }
 
 class AllyUnit {
@@ -81,6 +149,7 @@ class EnemyUnit {
     +int base_exp_amount {get; private set;}
     +AIType ai_type {get; private set;}
 
+    +override SearchMoveableArea(Tile[,] tile_map, int map_width, int map_height): void
     +MoveAgent(): void
 }
 
@@ -89,6 +158,8 @@ enum AIType {
     REACTIVE
     AGGRESSIVE
 }
+
+EnemyUnit +-- AIType
 
 class UnitStatus {
     +int max_hp {get; private set;}
@@ -118,6 +189,7 @@ class UnitClass {
     +string class_name
     +int move_cost {get; private set;}
     +Sprite icon {get; private set;}
+    +List<WeaponType> usable_weapon_types { get; private set; }
 }
 
 class UnitUpperClass {
@@ -126,6 +198,19 @@ class UnitUpperClass {
 
 class UnitLowerClass {
     +UnitUpperClass promotable_class {get; private set;}
+}
+
+class UnitManager {
+    +List<AllyUnit> ally_unit {get; private set;}
+    +List<EnemyUnit> enemy_unit {get; private set;}
+    +Unit selected_unit {get; private set;}
+    -MapManager map_manager
+
+    +SelectUnit(Unit select_unit): void
+    +DeselectUnit(): void
+    +ResetAllTurnStates(): void
+    +UpdateMoveableArea(Tile[,] tile_map, int map_width, int map_height): void
+    +UpdateRangeTiles(Tile[,] tile_map, int map_width, int map_height): void
 }
 
 class MapManager {
@@ -140,6 +225,8 @@ class MapManager {
     +UpdateMapData(Dictionary<Vector2Int, int>): void 
     +IsInBounds(Vector2Int pos): bool
     +RefreshMapDisplay(): void
+    +HightRightTiles(List<Tile> tiles, Color color): void
+    +ClearHightRights(): void
 }
 
 class TileFactory {
@@ -198,7 +285,7 @@ abstract Tile {
     +int avo_increase { get; protected set; }
     +int hp_recover { get; protected set; }
 
-    +GetCanMove(): bool
+    +GetCanMove(UnitClass unit_class): bool
 } 
 
 note right of Tile::GetCanMove
@@ -237,16 +324,30 @@ class Wall{
 
 }
 
+AttackAction ..|> IUnitAction
+HealAction ..|> IUnitAction
+WaitAction ..|> IUnitAction
+
 Item --|> ScriptableObject
-Wepon --|> Item
+Weapon --|> Item
 
 Unit --|> MonoBehavior
+Unit --> UnitClass
+Unit --> Tile
+Unit --> IUnitAction
+Unit --> ItemInstance
+
 UnitClass --|> ScriptableObject
 UnitStatus --|> ScriptableObject
 AllyUnit --|> Unit
+AllyUnit --> UnitGrowthRate
 EnemyUnit --|> Unit
 UnitUpperClass --|> UnitClass
 UnitLowerClass --|> UnitClass
+
+UnitManager --> Unit
+UnitManager --> MapManager
+UnitManager --> Tile
 
 MapManager --> CSVHandler
 MapManager --> TileFactory
