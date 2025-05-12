@@ -1,0 +1,36 @@
+@startuml prepare
+title 出撃準備から戦闘開始
+
+start
+:マップ生成;
+:全味方ユニットのユニットデータJsonを取得;
+repeat
+    if (is_alive == true) then (yes)
+        :ユニットデータからユニットインスタンスを生成;
+        :武器・アイテムのステータスSOから装備インスタンス生成;
+    endif
+repeat while (全ユニット処理完了)
+
+:マップデータから初期配置位置を取得;
+repeat
+    :味方ユニットを初期位置にインスタンス化;
+repeat while (初期位置が残っている)
+
+:敵ユニットとその初期位置をマップデータから取得;
+repeat
+    :敵ユニットを初期位置にインスタンス化;
+repeat while (敵ユニット残っている)
+
+repeat
+    if ("オプション == ユニット選択") then (yes)
+        :出撃・待機ユニットを選択;
+    elseif ("オプション == アイテム整理") then (yes)
+        :ユニット間のアイテム交換処理;
+    elseif ("オプション == 出撃") then (yes)
+        break
+    endif
+repeat while (true)
+
+:戦闘開始;
+stop
+@enduml
