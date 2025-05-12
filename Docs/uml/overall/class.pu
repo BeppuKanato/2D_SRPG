@@ -26,18 +26,30 @@ enum ItemTargetType {
     TILE
 }
 
-abstract Item {
+class ItemStore {
+    +Dictionary<string, ItemSO> id_so_pairs;
+}
+
+abstract ItemSO {
+    +string id {get; private set;}
     +string name {get; private set;}
     +bool priceless {get; private set;}
     +int sale_price {get; private set;}
     +int buying_price {get; private set;}
+    +int max_available_count {get; private set;}
     +Sprite icon {get; private set;}
     +ItemTargetType target_type {get; private set;}
-
-    +abstract Use(object targets): void
 }
 
-Item +-- ItemTargetType
+abstract Item {
+    +int avalilable_count {get; private set;}
+    +ItemSO item_data;
+    +abstract Use(object targets): void
+
+    +Item(ItemSO item_so): void
+}
+
+ItemSO +-- ItemTargetType
 
 class WeaponTypeAffinity {
     +Dictionary<WeaponType, List<WeaponType>> strongAgainst
@@ -47,13 +59,18 @@ class WeaponTypeAffinity {
 }
 
 
-class Weapon {
+class WeaponSO {
     +int[] ranges {get; private set;}
     +int power  {get; private set;}
     +WeaponType weapon_type {get; private set;}
     +WeaponCategory weapon_category {get; private set;}
+}
 
+class Weapon {
+    +int available_count {get; private set;}
+    +WeaponSO weapon_data; 
     +override Use(object targets): void
+    +Weapon(WeponSO weapon_so): void
 }
 
 enum WeaponCategory {
@@ -98,28 +115,19 @@ class HealAction {
 class WaitAction {
 }
 
-
-class ItemInstance {
-    +Item item {get; private set;}
-    +int count {get; private set;}
-
-    +Use(): void
-}
-
 class Unit {
     +string name {get; private set;}
     +int curret_hp {get; private set;}
     +Vector2Int pos {get; private set;}
     +UnitStatus status {get; private set;}
-    +UnitClass class {get; private set;}
+    +UnitClassSO class {get; private set;}
     +bool is_alive {get; privaate set;}
     +bool is_selected {get; private set;}
     +bool has_moved {get; private set;}
     +Sprite icon {get; private set;}
-    +int level {get; private set;}
     +Weapon equip_wepon {get; private set;}
     +List<Weapon> have_weapons {get; private set;}
-    +List<ItemInstance> have_items {get; private set;}
+    +List<Item> have_items {get; private set;}
     +List<IUnitAction> available_actions {get; private set;}
     +List<Tile> moveable_tiles {get; private set;}
     +List<Tile> in_range_tiles {get; private set;}
@@ -136,6 +144,8 @@ class Unit {
     +Heal(int amount): void
     +UpdateAvailableActions(): void
 }
+
+
 
 class AllyUnit {
     +UnitGrowthRate growth_rate {get; private set;}
@@ -161,6 +171,19 @@ enum AIType {
 
 EnemyUnit +-- AIType
 
+class UnitStatusSO {
+    +int max_hp {get; private set;}
+    +int str {get; private set;}
+    +int m_power {get; private set;}
+    +int tec {getl private set;}
+    +int agi {get; private set;}
+    +int def {get; private set;}
+    +int m_def {get; private set;}
+    +int luck {get; private set;}
+    +int physique {get; private set;}
+    +int level {get; private set;}
+}
+
 class UnitStatus {
     +int max_hp {get; private set;}
     +int str {get; private set;}
@@ -171,9 +194,21 @@ class UnitStatus {
     +int m_def {get; private set;}
     +int luck {get; private set;}
     +int physique {get; private set;}
+    +int level {get; private set;}
+
+    +UnitStatus(UnitStatusSO base_status): void
+    +UnitStatus(int max_hp, int str, int m_power, int tec, int agi, int def, int m_def, int luck, int physique): void
 }
 
-class UnitGrowthRate {
+note right of UnitStatus::UnitStatus
+    ユニットの初期ステータスはSOの静的データステータスを使う
+end note
+
+note right of UnitStatus::UnitStatus
+    セーブデータからのステータス読み込みはこのコンストラクタ
+end note
+
+class UnitGrowthRateSO {
     +int hp_rate {get; private set;}
     +int str_rate {get; private set;}
     +int m_power_rate {get; private set;}
@@ -185,18 +220,18 @@ class UnitGrowthRate {
     +int physique_rate {get; private set;}
 }
 
-class UnitClass {
+class UnitClassSO {
     +string class_name
     +int move_cost {get; private set;}
     +Sprite icon {get; private set;}
     +List<WeaponType> usable_weapon_types { get; private set; }
 }
 
-class UnitUpperClass {
+class UnitUpperClassSO {
 
 }
 
-class UnitLowerClass {
+class UnitLowerClassSO {
     +UnitUpperClass promotable_class {get; private set;}
 }
 

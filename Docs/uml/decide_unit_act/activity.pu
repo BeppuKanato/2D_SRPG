@@ -1,0 +1,29 @@
+@startuml search_move_area
+title ユニットのターン行動処理
+
+start
+:ユニットを選択;
+:A*探索で移動範囲を検索;
+:移動先を選択;
+:ユニットを移動;
+:行動を選択;
+
+if (選んだ行動 == 攻撃) then (yes)
+    :武器を選択;
+    :攻撃対象を選択;
+    :攻撃を実行;
+elseif (選んだ行動 == アイテム) then (yes)
+    :アイテムを選択;
+    if (ItemTargetType == MYSELF || ItemTargetType == TILE) then (yes)
+        :アイテムを使用;
+    elseif (ItemTargetType == UNIT) then (yes)
+        :使用対象を選択;
+        :アイテムを使用;
+    endif
+elseif (選んだ行動 == 待機) then (yes)
+    :その場で待機処理;
+endif
+
+:ユニットを行動終了状態にする;
+stop
+@enduml
