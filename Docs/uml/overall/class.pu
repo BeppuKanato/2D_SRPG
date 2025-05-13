@@ -26,6 +26,32 @@ enum ItemTargetType {
     TILE
 }
 
+interface ISavaToJson {
+    -SaveManager save_manager;
+    +abstract SaveData(): void;
+    +abstract LoadData(string json_text): void;
+}
+
+class SaveManager {
+    +SaveToJson(T save_data, string file_path): void
+    +LoadFromJson(string file_path): void
+}
+
+class SoStore {
+    +List<IdSOPair> id_so_list {get; private set;}
+    +Dictionary<string, ScriptableObject> id_so_pairs {get; private set;} 
+
+    +GetSO(string id): ScriptableObject;
+    +GetSO<T>(string id): T
+}
+
+struct IdSOPair {
+    +string id {get; private set;}
+    +ScriptableObject so {get; private set;}
+}
+
+SoStore +-- IdSOPair
+
 class ItemStore {
     +Dictionary<string, ItemSO> id_so_pairs;
 }
@@ -145,14 +171,14 @@ class Unit {
     +UpdateAvailableActions(): void
 }
 
-
-
 class AllyUnit {
     +UnitGrowthRate growth_rate {get; private set;}
     +int exp {get; private set;}
     +GainExp(int exp_amount): void
     +LevelUp(): void
     +ClassPromote(): void
+    +SaveData(): void;
+    +LoadData(string json_text): void;
 }
 
 class EnemyUnit {
@@ -161,6 +187,42 @@ class EnemyUnit {
 
     +override SearchMoveableArea(Tile[,] tile_map, int map_width, int map_height): void
     +MoveAgent(): void
+}
+
+struct AllyUnitSaveData {
+    +int curret_hp {get; private set;}
+    +int max_hp {get; private set;}
+    +int str {get; private set;}
+    +int m_power {get; private set;}
+    +int tec {getl private set;}
+    +int agi {get; private set;}
+    +int def {get; private set;}
+    +int m_def {get; private set;}
+    +int luck {get; private set;}
+    +int physique {get; private set;}
+    +int level {get; private set;}
+    +int exp {get; private set;}
+    +string equip_wepon_id {get; private set;}
+    +List<string> have_weapon_ids {get; private set;}
+    +List<string> have_item_ids {get; private set;}
+
+    struct AllyUnitSaveData(
+        int current_hp,
+        int max_hp,
+        int str,
+        int m_power,
+        int tec,
+        int agi,
+        int def,
+        int m_def,
+        int luck,
+        int physique,
+        int level,
+        int exp,
+        string equip_wepon_id,
+        List<string> have_weapon_ids,
+        List<string> have_item_ids
+    )
 }
 
 enum AIType {
@@ -375,6 +437,7 @@ Unit --> ItemInstance
 UnitClass --|> ScriptableObject
 UnitStatus --|> ScriptableObject
 AllyUnit --|> Unit
+AllyUnit ..|> ISavaToJson
 AllyUnit --> UnitGrowthRate
 EnemyUnit --|> Unit
 UnitUpperClass --|> UnitClass
