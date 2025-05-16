@@ -1,0 +1,13 @@
+@startuml
+title スタート画面 シーケンス図
+
+participant SavaManager
+participant TitleManager
+participant UnitManager
+participant MapManager
+participant AllyUnitStore
+
+TitleManager -> SavaManager: セーブデータを要求
+SavaManager -> SoSaveDataHolder: AllyUnitDataのリストに追加
+
+@enduml

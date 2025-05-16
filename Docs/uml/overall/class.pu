@@ -27,17 +27,25 @@ enum ItemTargetType {
 }
 
 interface ISavaToJson {
+    ..JSON形式での保存・読み込みを規定するインターフェース..
     -SaveManager save_manager;
     +abstract SaveData(): void;
     +abstract LoadData(string json_text): void;
 }
 
+class SoSaveDataHolder {
+    ..セーブデータをまとめて保持するScriptableObject..
+    +List<AllyUnitSaveData> {get; private set;}
+}
+
 class SaveManager {
+    ..任意のデータをJSON形式で保存・読み込みする管理クラス..
     +SaveToJson(T save_data, string file_path): void
     +LoadFromJson(string file_path): void
 }
 
 class SoStore {
+    ..IDに対応したScriptableObjectを管理し提供するストア..
     +List<IdSOPair> id_so_list {get; private set;}
     +Dictionary<string, ScriptableObject> id_so_pairs {get; private set;} 
 
@@ -51,10 +59,6 @@ struct IdSOPair {
 }
 
 SoStore +-- IdSOPair
-
-class ItemStore {
-    +Dictionary<string, ItemSO> id_so_pairs;
-}
 
 abstract ItemSO {
     +string id {get; private set;}
@@ -123,6 +127,7 @@ enum ActionType {
 }
 
 interface IUnitAction {
+    ..ユニットの行動処理を規定するインターフェース..
     +ActionType action_type {get; private set;}
     +string action_name {get; protected set;}
     +CanExecute(Unit exec_unit, object target): bool
@@ -172,6 +177,7 @@ class Unit {
 }
 
 class AllyUnit {
+    ..味方ユニットの具体的な操作・成長処理を持つクラス..
     +UnitGrowthRate growth_rate {get; private set;}
     +int exp {get; private set;}
     +GainExp(int exp_amount): void
@@ -182,6 +188,7 @@ class AllyUnit {
 }
 
 class EnemyUnit {
+    ..敵ユニットの行動AIや移動処理を担当するクラス..
     +int base_exp_amount {get; private set;}
     +AIType ai_type {get; private set;}
 
@@ -205,24 +212,6 @@ struct AllyUnitSaveData {
     +string equip_wepon_id {get; private set;}
     +List<string> have_weapon_ids {get; private set;}
     +List<string> have_item_ids {get; private set;}
-
-    struct AllyUnitSaveData(
-        int current_hp,
-        int max_hp,
-        int str,
-        int m_power,
-        int tec,
-        int agi,
-        int def,
-        int m_def,
-        int luck,
-        int physique,
-        int level,
-        int exp,
-        string equip_wepon_id,
-        List<string> have_weapon_ids,
-        List<string> have_item_ids
-    )
 }
 
 enum AIType {
@@ -234,6 +223,7 @@ enum AIType {
 EnemyUnit +-- AIType
 
 class UnitStatusSO {
+    ..ユニットのステータス情報を保持するScriptableObject 初期データに使用..
     +int max_hp {get; private set;}
     +int str {get; private set;}
     +int m_power {get; private set;}
@@ -247,6 +237,7 @@ class UnitStatusSO {
 }
 
 class UnitStatus {
+    ..ユニットのステータス情報を保持するクラス(HPや攻撃力など)..
     +int max_hp {get; private set;}
     +int str {get; private set;}
     +int m_power {get; private set;}
@@ -298,6 +289,7 @@ class UnitLowerClassSO {
 }
 
 class UnitManager {
+    ..全ユニットの操作・管理を行うクラス..
     +List<AllyUnit> ally_unit {get; private set;}
     +List<EnemyUnit> enemy_unit {get; private set;}
     +Unit selected_unit {get; private set;}
@@ -311,6 +303,8 @@ class UnitManager {
 }
 
 class MapManager {
+    ..マップのタイル配置や表示を管理するクラス..
+    
     -MapInfo map_info
     -TileFactory tile_factory
     -CSVHandler csv_handler
@@ -324,6 +318,10 @@ class MapManager {
     +RefreshMapDisplay(): void
     +HightRightTiles(List<Tile> tiles, Color color): void
     +ClearHightRights(): void
+}
+
+class MapSaveData {
+    
 }
 
 class TileFactory {

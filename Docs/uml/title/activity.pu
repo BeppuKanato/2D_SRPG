@@ -1,0 +1,20 @@
+@startuml
+title スタート画面 アクティビティ図
+
+repeat
+    if ("オプション == new game") then(yes)
+        :セーブスロット選択;
+        :初期化処理;
+        :ゲーム開始;
+        break
+    elseif ("オプション == ロード") then(yes)
+        :セーブスロット一覧表示;
+        :ユーザーがスロットを選択;
+        :セーブデータからマップ状況、ユニット情報を読み込み;
+        :ユニットプレハブにステータスを割り当て生成;
+        :ゲーム画面へ;
+    endif
+repeat while(true)
+
+stop
+@enduml

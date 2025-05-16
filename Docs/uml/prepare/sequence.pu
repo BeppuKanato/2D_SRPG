@@ -1,0 +1,25 @@
+@startuml
+title 準備画面 シーケンス図
+
+participant MapManager
+participant UnitManager
+participant SoSaveDataHolder
+participant SoStore
+participant UnitStatus
+participant Unit
+
+UnitManager -> SoSaveDataHolder: ユニットのセーブデータを要求
+SoSaveDataHolder -> UnitManager: ユニットのセーブデータを返却
+
+UnitManager -> SoStore: ユニットIDのプレハブを要求
+SoStore -> UnitManager: プレハブを返却
+
+UnitManager -> Unit: プレハブをInstantiate
+UnitManager -> UnitStatus: セーブデータからステータスを生成
+Unit -> Unit: ステータスを設定
+
+UnitManager -> MapManager: ユニットのマップ上座標を要求
+MapManager -> UnitManager: 座標情報を返却
+Unit -> MapManager: 座標に配置
+
+@enduml
