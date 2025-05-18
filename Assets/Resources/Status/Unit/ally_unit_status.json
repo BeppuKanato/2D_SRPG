@@ -1,0 +1,51 @@
+{
+  "data": [
+    {
+      "unit_id": "Ally_Unit_001",
+      "current_hp": 9,
+      "max_hp": 9,
+      "str": 8,
+      "m_power": 7,
+      "tec": 6,
+      "agi": 5,
+      "def": 4,
+      "m_def": 3,
+      "luck": 2,
+      "physique": 1,
+      "level": 1,
+      "exp": 0,
+      "equip_weapon_id": "sorwd_001",
+      "have_weapon_ids": [
+        "sorwrd_001",
+        "axe_001"
+      ],
+      "have_item_ids": [
+        "hea;_001",
+        "heal_002"
+      ]
+    },
+    {
+      "unit_id": "Ally_Unit_002",
+      "current_hp": 1,
+      "max_hp": 1,
+      "str": 2,
+      "m_power": 3,
+      "tec": 4,
+      "agi": 5,
+      "def": 6,
+      "m_def": 7,
+      "luck": 8,
+      "physique": 9,
+      "level": 10,
+      "exp": 50,
+      "equip_weapon_id": "lance_001",
+      "have_weapon_ids": [
+        "lance_002",
+        "lance_001"
+      ],
+      "have_item_ids": [
+        "heal_001"
+      ]
+    }
+  ]
+}

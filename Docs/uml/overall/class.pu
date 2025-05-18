@@ -28,20 +28,19 @@ enum ItemTargetType {
 
 interface ISavaToJson {
     ..JSON形式での保存・読み込みを規定するインターフェース..
-    -SaveManager save_manager;
+    -JsonHandler json_handler;
     +abstract SaveData(): void;
     +abstract LoadData(string json_text): void;
 }
 
-class SoSaveDataHolder {
-    ..セーブデータをまとめて保持するScriptableObject..
-    +List<AllyUnitSaveData> {get; private set;}
+class GameManager {
+    +UnitManager unit_manager;
+    +MapManager map_manager;
 }
 
-class SaveManager {
-    ..任意のデータをJSON形式で保存・読み込みする管理クラス..
-    +SaveToJson(T save_data, string file_path): void
-    +LoadFromJson(string file_path): void
+class SaveDataHolderSo {
+    ..セーブデータをまとめて保持するScriptableObject..
+    +AllyUnitSaveData[] ally_uniy_save_data {get; private set;}
 }
 
 class SoStore {
@@ -58,28 +57,31 @@ struct IdSOPair {
     +ScriptableObject so {get; private set;}
 }
 
-SoStore +-- IdSOPair
+' class GoStore {
+'     ..IDに対応したGameObjectを管理して提供するストア..
+'     +List<IdGoPair> id_go_list {get; private set;}
+'     +Dictionary<string, GameObject> id_go_pairs {get; private set;}
 
-abstract ItemSO {
-    +string id {get; private set;}
-    +string name {get; private set;}
-    +bool priceless {get; private set;}
-    +int sale_price {get; private set;}
-    +int buying_price {get; private set;}
-    +int max_available_count {get; private set;}
-    +Sprite icon {get; private set;}
-    +ItemTargetType target_type {get; private set;}
-}
+'     +GetGo(string id): GameObject
+'     +GetGo<T>(string id): T
+' }
+
+' struct IdMonoPair {
+'     +string id {get; privaate set;}
+'     +MonoBehavior mono {get; private set}
+' }
+' MonoStore +-- IdMonoPair
+
+SoStore +-- IdSOPair
 
 abstract Item {
     +int avalilable_count {get; private set;}
-    +ItemSO item_data;
     +abstract Use(object targets): void
 
-    +Item(ItemSO item_so): void
+    +Item(int avalilable_count): void
 }
 
-ItemSO +-- ItemTargetType
+Item +-- ItemTargetType
 
 class WeaponTypeAffinity {
     +Dictionary<WeaponType, List<WeaponType>> strongAgainst
@@ -88,8 +90,7 @@ class WeaponTypeAffinity {
     +IsWeakAgainst(attacker: WeaponType, defender: WeaponType): bool
 }
 
-
-class WeaponSO {
+class WeaponStatus {
     +int[] ranges {get; private set;}
     +int power  {get; private set;}
     +WeaponType weapon_type {get; private set;}
@@ -98,9 +99,9 @@ class WeaponSO {
 
 class Weapon {
     +int available_count {get; private set;}
-    +WeaponSO weapon_data; 
+    +WeaponStatus weapon_status; 
     +override Use(object targets): void
-    +Weapon(WeponSO weapon_so): void
+    +Weapon(WeaponStatus weapon_status): void
 }
 
 enum WeaponCategory {
@@ -126,6 +127,24 @@ enum ActionType {
     WAIT
 }
 
+enum FieldInputStateType {
+    UnitSelect
+    MoveSelect
+    CommandSelect
+}
+
+interface IFieldInput{
+    +SetProcesses(): void
+    +OnNavigate(): void
+    +OnDecide(): void
+    +OnCancel(): void
+}
+
+class UnitSelectProcess{
+    -InputActionHandler input_action_handler;
+    -UnitManager unit_manager;
+}
+
 interface IUnitAction {
     ..ユニットの行動処理を規定するインターフェース..
     +ActionType action_type {get; private set;}
@@ -146,11 +165,9 @@ class HealAction {
 class WaitAction {
 }
 
-class Unit {
-    +string name {get; private set;}
-    +int curret_hp {get; private set;}
+abstract Unit {
+    +string unit_name {get; private set;}
     +Vector2Int pos {get; private set;}
-    +UnitStatus status {get; private set;}
     +UnitClassSO class {get; private set;}
     +bool is_alive {get; privaate set;}
     +bool is_selected {get; private set;}
@@ -179,7 +196,7 @@ class Unit {
 class AllyUnit {
     ..味方ユニットの具体的な操作・成長処理を持つクラス..
     +UnitGrowthRate growth_rate {get; private set;}
-    +int exp {get; private set;}
+    +AllyUnitSatus unit_status {get; private set;}
     +GainExp(int exp_amount): void
     +LevelUp(): void
     +ClassPromote(): void
@@ -189,7 +206,7 @@ class AllyUnit {
 
 class EnemyUnit {
     ..敵ユニットの行動AIや移動処理を担当するクラス..
-    +int base_exp_amount {get; private set;}
+    +EnemyUnitStatus unit_status {get; private set;}
     +AIType ai_type {get; private set;}
 
     +override SearchMoveableArea(Tile[,] tile_map, int map_width, int map_height): void
@@ -197,6 +214,7 @@ class EnemyUnit {
 }
 
 struct AllyUnitSaveData {
+    +string unit_id {get; privaate set;}
     +int curret_hp {get; private set;}
     +int max_hp {get; private set;}
     +int str {get; private set;}
@@ -209,7 +227,7 @@ struct AllyUnitSaveData {
     +int physique {get; private set;}
     +int level {get; private set;}
     +int exp {get; private set;}
-    +string equip_wepon_id {get; private set;}
+    +string equip_weapon_id {get; private set;}
     +List<string> have_weapon_ids {get; private set;}
     +List<string> have_item_ids {get; private set;}
 }
@@ -222,23 +240,26 @@ enum AIType {
 
 EnemyUnit +-- AIType
 
-class UnitStatusSO {
-    ..ユニットのステータス情報を保持するScriptableObject 初期データに使用..
-    +int max_hp {get; private set;}
-    +int str {get; private set;}
-    +int m_power {get; private set;}
-    +int tec {getl private set;}
-    +int agi {get; private set;}
-    +int def {get; private set;}
-    +int m_def {get; private set;}
-    +int luck {get; private set;}
-    +int physique {get; private set;}
-    +int level {get; private set;}
-}
+' class UnitStatusSO {
+'     ..ユニットのステータス情報を保持するScriptableObject 初期データに使用..
+'     +string unit_id {get; private set;}
+'     +int max_hp {get; private set;}
+'     +int str {get; private set;}
+'     +int m_power {get; private set;}
+'     +int tec {getl private set;}
+'     +int agi {get; private set;}
+'     +int def {get; private set;}
+'     +int m_def {get; private set;}
+'     +int luck {get; private set;}
+'     +int physique {get; private set;}
+'     +int level {get; private set;}
+' }
 
-class UnitStatus {
+abstract UnitStatus {
     ..ユニットのステータス情報を保持するクラス(HPや攻撃力など)..
+    +string unit_id {get; private set;}
     +int max_hp {get; private set;}
+    +int current_hp {get; private set;}
     +int str {get; private set;}
     +int m_power {get; private set;}
     +int tec {getl private set;}
@@ -249,19 +270,22 @@ class UnitStatus {
     +int physique {get; private set;}
     +int level {get; private set;}
 
-    +UnitStatus(UnitStatusSO base_status): void
-    +UnitStatus(int max_hp, int str, int m_power, int tec, int agi, int def, int m_def, int luck, int physique): void
+    +UnitStatus(int max_hp, int current_hp, int str, int m_power, int tec, int agi, int def, int m_def, int luck, int physique): void
 }
 
-note right of UnitStatus::UnitStatus
-    ユニットの初期ステータスはSOの静的データステータスを使う
-end note
+class AllyUnitSatus {
+    +int exp {get; private set;}
+}
+
+class EnemyUnitStatus {
+    +int base_exp_amount {get; private set;}
+}
 
 note right of UnitStatus::UnitStatus
     セーブデータからのステータス読み込みはこのコンストラクタ
 end note
 
-class UnitGrowthRateSO {
+class UnitGrowthRate {
     +int hp_rate {get; private set;}
     +int str_rate {get; private set;}
     +int m_power_rate {get; private set;}
@@ -302,6 +326,10 @@ class UnitManager {
     +UpdateRangeTiles(Tile[,] tile_map, int map_width, int map_height): void
 }
 
+class FieldInputManager {
+
+}
+
 class MapManager {
     ..マップのタイル配置や表示を管理するクラス..
     
@@ -324,19 +352,34 @@ class MapSaveData {
     
 }
 
-class TileFactory {
-    -TileTypePrefabPair[] tile_pairs
-    -Dictionary<TileType, GameObject> tile_prefabs
+class FactoryWithStringKey {
+    -StringKeyPrefabPair[] string_key_prefab_pairs
+    +Dictionary<string, GameObject> prefabs;
 
-    +InstantiateTile(TileType tile_type, Vector2 pos, Quaternion rotation): Tile
+    +InstantiateFromStringKey(string key, Vector2 pos, Quaternion rotetion): GamaObject
+    -ConvertArrayToDictionary(): void
 }
 
-struct TileTypePrefabPair {
-    +TileType type
+struct StringKeyPrefabPair {
+    +string key
     +GameObject prefab
 }
 
-TileFactory +-- TileTypePrefabPair
+class FactoryWithIntKey {
+    -IntKeyPrefabPair[] int_key_prefab_pairs
+    +Dictionary<Int, GameObject> prefabs;
+
+    +InstantiateFromIntKey(int key, Vector2 pos, Quaternion rotation): GameObject
+    -ConvertArrayToDictionary(): void
+}
+
+struct IntKeyPrefabPair {
+    +int key
+    +GameObject prefab
+}
+
+FactoryWithStringKey +-- StringKeyPrefabPair
+FactoryWithIntKey +-- IntKeyPrefabPair
 
 class MonoBehavior {
 
@@ -347,8 +390,21 @@ class ScriptableObject {
 }
 
 class CSVHandler {
-    +async WriteCSV(string csv_file, List<string[]> write_data): WriteResult
-    +async ReadCSV(string csv_file): ReadResult
+    +WriteCSV(string csv_file, List<string[]> write_data): WriteResult
+    +ReadCSV(string csv_file): ReadResult
+}
+
+class JsonHandler {
+    +ReadJsonFromResources<T>(string file_name): List<T>
+    +WriteJson<T>(T data, string file_name): void
+}
+
+class InputActionHandler {
+    -PlayerInput player_input
+    -Dictionary<string, Dictionary<string, System.Action<InputAction.CallbackContext>>> current_callbacks
+
+    +SwitchActionMap(string action_map)
+    +SetCallback(string action_name, System.Action<InputAction.CallbackContext> callback)
 }
 
 struct ReadResult {
@@ -419,6 +475,10 @@ class Wall{
 
 }
 
+GameManager --|> MonoBehavior
+
+UnitSelectProcess ..|> IFieldInput
+
 AttackAction ..|> IUnitAction
 HealAction ..|> IUnitAction
 WaitAction ..|> IUnitAction
@@ -431,19 +491,27 @@ Unit --> UnitClass
 Unit --> Tile
 Unit --> IUnitAction
 Unit --> ItemInstance
+Unit --> UnitStatus
+
+AllyUnitSatus --|> UnitStatus
+EnemyUnit --|> UnitStatus
 
 UnitClass --|> ScriptableObject
-UnitStatus --|> ScriptableObject
+UnitStatusSO --|> ScriptableObject
 AllyUnit --|> Unit
-AllyUnit ..|> ISavaToJson
 AllyUnit --> UnitGrowthRate
+AllyUnit --> AllyUnitSatus
 EnemyUnit --|> Unit
+EnemyUnit --> EnemyUnitStatus
 UnitUpperClass --|> UnitClass
 UnitLowerClass --|> UnitClass
+
+TileFactory --|> BaseFactory
 
 UnitManager --> Unit
 UnitManager --> MapManager
 UnitManager --> Tile
+UnitManager ..|> ISavaToJson
 
 MapManager --> CSVHandler
 MapManager --> TileFactory

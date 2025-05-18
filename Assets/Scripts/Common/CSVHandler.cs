@@ -5,7 +5,6 @@ public class CSVHandler
 {
     /// <summary>
     /// CSVファイルをロードします
-    /// read_dataの型をstring[,]にする可能性あり
     /// </summary>
     /// <param name="csv_file_name">
     /// Resources フォルダ以下の CSV ファイルパス（例: "Map/map_01"）

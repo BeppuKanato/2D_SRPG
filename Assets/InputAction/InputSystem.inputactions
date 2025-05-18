@@ -1,0 +1,120 @@
+{
+    "name": "InputSystem",
+    "maps": [
+        {
+            "name": "FieldActionMap",
+            "id": "52b1f06c-4259-4454-9fa0-f02517df51d8",
+            "actions": [
+                {
+                    "name": "stick_move",
+                    "type": "Button",
+                    "id": "7a2ecf0f-2f60-4ef0-8793-895a7587d03b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "pad_move",
+                    "type": "Button",
+                    "id": "112ad67b-4583-4a51-98f2-3b5edca35a1d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2481fcbc-ec73-4384-a949-566c43235f6d",
+                    "path": "<SwitchProControllerHID>/leftStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "stick_move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21651e4b-ebc8-4952-95f9-c19212f4a6c7",
+                    "path": "<SwitchProControllerHID>/leftStick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "stick_move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0a8e0f0c-bc11-40b1-82ff-91b7de3b3aee",
+                    "path": "<SwitchProControllerHID>/leftStick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "stick_move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1533ab9b-b52e-475e-b4c2-df918180d650",
+                    "path": "<Gamepad>/leftStick/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "stick_move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5bcaaf24-2a04-458c-99a9-a0881307aec5",
+                    "path": "<SwitchProControllerHID>/dpad/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "pad_move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "793ca167-3342-436f-a060-826b6c05dac4",
+                    "path": "<SwitchProControllerHID>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "pad_move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f3588241-f729-4db1-91c7-47030572a55c",
+                    "path": "<SwitchProControllerHID>/dpad/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "pad_move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7fa671f9-fa16-45e9-b5c5-3ff7333241cf",
+                    "path": "<SwitchProControllerHID>/dpad/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "pad_move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

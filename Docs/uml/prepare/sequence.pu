@@ -3,20 +3,26 @@ title 準備画面 シーケンス図
 
 participant MapManager
 participant UnitManager
-participant SoSaveDataHolder
+participant SaveDataHolderSo
 participant SoStore
+participant GoStore
 participant UnitStatus
 participant Unit
+participant Weapon
 
-UnitManager -> SoSaveDataHolder: ユニットのセーブデータを要求
-SoSaveDataHolder -> UnitManager: ユニットのセーブデータを返却
+UnitManager -> SaveDataHolderSo: ユニットのセーブデータを要求
+SaveDataHolderSo -> UnitManager: ユニットのセーブデータを返却
 
-UnitManager -> SoStore: ユニットIDのプレハブを要求
-SoStore -> UnitManager: プレハブを返却
+UnitManager -> GoStore: ユニットIDのプレハブを要求
+GoStore -> UnitManager: プレハブを返却
 
 UnitManager -> Unit: プレハブをInstantiate
 UnitManager -> UnitStatus: セーブデータからステータスを生成
 Unit -> Unit: ステータスを設定
+
+UnitManager -> GoStore: ユニットが装備している武器IDのプレハブを要求
+GoStore -> UnitManager: プレハブを返却
+UnitManager -> Unit: 武器プレハブを追加
 
 UnitManager -> MapManager: ユニットのマップ上座標を要求
 MapManager -> UnitManager: 座標情報を返却

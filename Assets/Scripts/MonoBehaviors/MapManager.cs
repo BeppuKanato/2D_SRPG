@@ -11,7 +11,9 @@ public class MapManager : MonoBehaviour
     [SerializeField]
     MapInfo map_info;
     [SerializeField]
-    TileFactory tile_factory;
+    FactoryWithIntKey tile_factory;
+    [SerializeField]
+    Transform field_parent;
 
     CSVHandler csv_handler;
     Tile[,] map_tiles;
@@ -23,13 +25,20 @@ public class MapManager : MonoBehaviour
     [Tooltip("変更先のタイル"), SerializeField]
     TileType change_type;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         if (map_info == null || tile_factory == null)
         {
             Debug.LogError("必要なコンポーネントがInspectorで設定されていません！");
         }
         csv_handler = new CSVHandler();
+    }
+
+    /// <summary>
+    /// マップを生成する
+    /// </summary>
+    public void LoadAndGenerateMap()
+    {
         map_int_data = ReadMapData();
         MapDisplay();
     }
@@ -106,6 +115,7 @@ public class MapManager : MonoBehaviour
     }
     /// <summary>
     /// 座標のタイルのデータを返す
+    /// 範囲外の場合nulll
     /// </summary>
     /// <param name="pos">
     /// タイルデータを取得する座標
@@ -113,7 +123,14 @@ public class MapManager : MonoBehaviour
     /// <returns>Tileクラス</returns>
     public Tile GetTileData(Vector2Int pos)
     {
-        return map_tiles[pos.y, pos.x];
+        if (IsInBounds(pos))
+        {
+            return map_tiles[pos.y, pos.x];
+        }
+        else
+        {
+            return null;
+        }
     }
     /// <summary>
     /// マップ上の指定座標にあるタイルを、指定されたタイル種別に差し替えます。
@@ -139,7 +156,7 @@ public class MapManager : MonoBehaviour
             Vector2 generate_pos = map_tiles[pos.y, pos.x].gameObject.transform.position;
             Destroy(map_tiles[pos.y, pos.x].gameObject);
 
-            Tile new_tile = tile_factory.InstantiateTile(tile_type, generate_pos, Quaternion.identity);
+            Tile new_tile = tile_factory.InstantiateFromIntKey(field_parent,(int)tile_type, generate_pos, Quaternion.identity).GetComponent<Tile>();
             map_tiles[pos.y, pos.x] = new_tile;
         }
     }
@@ -172,7 +189,7 @@ public class MapManager : MonoBehaviour
         {
             for (int width = 0; width < map_int_data.GetLength(1); width++)
             {
-                map_tiles[height, width] = tile_factory.InstantiateTile((TileType)map_int_data[height, width], pos, Quaternion.identity);
+                map_tiles[height, width] = tile_factory.InstantiateFromIntKey(field_parent, map_int_data[height, width], pos, Quaternion.identity).GetComponent<Tile>();
                 pos.x += sprite_width;
             }
 
