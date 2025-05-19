@@ -12,6 +12,8 @@ public class UnitSelectProcess :MonoBehaviour ,IFieldInput
     GameObject cursol;
     Vector2Int grid_corsol_pos;
 
+    public MapInfo map_info;
+
     public void Initialize()
     {
         //仮のカーソル初期化
@@ -64,6 +66,9 @@ public class UnitSelectProcess :MonoBehaviour ,IFieldInput
         {
             Unit unit = unit_manager.GetUnitByGritPos(grid_corsol_pos);
             unit_manager.SetSelectedUnit(unit);
+
+            SearchAlgorithms search_algorithm = new SearchAlgorithms();
+            search_algorithm.SearchMoveableArea(map_manager.map_tiles, map_info.width, map_info.height, unit.grid_pos, 4);
         }
     }
 

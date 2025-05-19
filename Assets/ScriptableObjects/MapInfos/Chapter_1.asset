@@ -16,6 +16,6 @@ MonoBehaviour:
   <width>k__BackingField: 10
   <height>k__BackingField: 15
   <initial_pos_ally>k__BackingField:
+  - {x: 0, y: 2}
   - {x: 0, y: 0}
-  - {x: 1, y: 1}
   <initial_pos_enemy>k__BackingField: []

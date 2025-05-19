@@ -11,7 +11,7 @@ public class MapManager : MonoBehaviour
     [SerializeField] Transform field_parent;
 
     CSVHandler csv_handler;
-    Tile[,] map_tiles;
+    public Tile[,] map_tiles { get; private set; }
     int[,] map_int_data;
 
     [SerializeField] bool is_debug_mode = false;
@@ -26,6 +26,9 @@ public class MapManager : MonoBehaviour
         csv_handler = new CSVHandler();
     }
 
+    /// <summary>
+    /// マップデータの読み込み、タイル生成を行う
+    /// </summary>
     public void LoadAndGenerateMap()
     {
         map_int_data = ReadMapData();
@@ -63,11 +66,20 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// CSVからマップデータを読み込む
+    /// </summary>
+    /// <returns>
+    /// csvの数値データ
+    /// </returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public int[,] ReadMapData()
     {
         CSVHandler.ReadResult read_result = csv_handler.ReadCSV($"MapData/{map_info.csv_file_name}");
         if (!read_result.is_success)
+        {
             throw new InvalidOperationException($"CSV読み込み失敗: {read_result.error_message}");
+        }
 
         if (read_result.read_data.Count != map_info.height || read_result.read_data[0].Length != map_info.width)
         {
@@ -86,11 +98,26 @@ public class MapManager : MonoBehaviour
         return result;
     }
 
+    /// <summary>
+    /// 指定グリッド座標のタイルを返す
+    /// </summary>
+    /// <param name="pos">
+    /// グリッド座標
+    /// </param>
+    /// <returns>
+    /// タイルデータ
+    /// </returns>
     public Tile GetTileData(Vector2Int pos)
     {
         return IsInBounds(pos) ? map_tiles[pos.x, pos.y] : null;
     }
 
+    /// <summary>
+    /// 指定座標のマップデータを変更する
+    /// </summary>
+    /// <param name="update_data">
+    /// 更新するタイルの座標、更新後のタイル
+    /// </param>
     public void UpdateMapData(Dictionary<Vector2Int, int> update_data)
     {
         foreach (var key_value in update_data)
@@ -107,11 +134,23 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 引数がマップ範囲内かを返す
+    /// </summary>
+    /// <param name="pos">
+    /// 調べる座標
+    /// </param>
+    /// <returns>
+    /// マップ内: true, マップ外: false
+    /// </returns>
     public bool IsInBounds(Vector2Int pos)
     {
         return pos.x >= 0 && pos.x < map_info.width && pos.y >= 0 && pos.y < map_info.height;
     }
 
+    /// <summary>
+    /// マップを描画する
+    /// </summary>
     public void MapDisplay()
     {
         map_tiles = new Tile[map_info.width, map_info.height];
@@ -125,6 +164,9 @@ public class MapManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// マップを描画し直す
+    /// </summary>
     public void RefreshMapDisplay()
     {
         foreach (Tile tile in map_tiles)

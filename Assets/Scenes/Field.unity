@@ -166,6 +166,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 7a2ecf0f-2f60-4ef0-8793-895a7587d03b
     m_ActionName: FieldActionMap/Move
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 112ad67b-4583-4a51-98f2-3b5edca35a1d
+    m_ActionName: FieldActionMap/pad_move
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: FieldActionMap
@@ -521,6 +525,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   map_manager: {fileID: 1302182730}
   ally_unit_factory: {fileID: 1811293443}
+  selected_unit: {fileID: 0}
   ally_unit_data: []
   ally_units: []
   map_info: {fileID: 11400000, guid: f02d3171046f47643b981f5502f2c016, type: 2}
@@ -587,6 +592,7 @@ MonoBehaviour:
   map_manager: {fileID: 1302182730}
   unit_manager: {fileID: 799325770}
   cursol: {fileID: 206054190}
+  map_info: {fileID: 11400000, guid: f02d3171046f47643b981f5502f2c016, type: 2}
 --- !u!1001 &1140770729
 PrefabInstance:
   m_ObjectHideFlags: 0

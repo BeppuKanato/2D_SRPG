@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
-public class SearchAlgoritms : MonoBehaviour
+public class SearchAlgorithms
 {
     public void SearchMoveableArea(Tile[,] tile_map, int map_width, int map_height, Vector2Int start_grid_pos, int move_cost)
     {
@@ -12,11 +12,17 @@ public class SearchAlgoritms : MonoBehaviour
         {
             for (int x = 0; x < tile_map.GetLength(0); x++)
             {
-                //node_list.Add(new Vector2Int(x, y), new TileNode(
-                //        tile_map[]
-                //    ));
+                node_list.Add(new Vector2Int(x, y), new TileNode(
+                        NodeStateType.None,
+                        0,
+                        0,
+                        0,
+                        tile_map[x, y]
+                    ));
             }
         }
+
+        Debug.Log(node_list[new Vector2Int(1, 2)].tile.gameObject.transform.position);
     }
 
     //ノードの探索状態
