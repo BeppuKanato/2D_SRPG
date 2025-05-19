@@ -1,50 +1,52 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 
 public class Unit : MonoBehaviour
 {
-    [field: SerializeField, Tooltip("ƒ†ƒjƒbƒg‚Ì–¼‘O")]
+    [field: SerializeField, Tooltip("ãƒ¦ãƒ‹ãƒƒãƒˆã®åå‰")]
     public string unit_name { get; private set; }
-    [field: SerializeField, Tooltip("ƒOƒŠƒbƒhÀ•W")]
+    [field: SerializeField, Tooltip("ãƒ¦ãƒ‹ãƒƒãƒˆã®ã‚¿ã‚¤ãƒ—")]
+    public UnitType unit_type { get; private set; }
+    [field: SerializeField, Tooltip("ã‚°ãƒªãƒƒãƒ‰åº§æ¨™")]
     public Vector2Int grid_pos { get; private set; }
-    [field: SerializeField, Tooltip("ƒ†ƒjƒbƒg‚ÌƒNƒ‰ƒX")]
+    [field: SerializeField, Tooltip("ãƒ¦ãƒ‹ãƒƒãƒˆã®ã‚¯ãƒ©ã‚¹")]
     public UnitClassSO unit_class { get; private set; }
-    [field: SerializeField, Tooltip("ƒ†ƒjƒbƒg‚Ì¶‘¶ƒtƒ‰ƒO")]
+    [field: SerializeField, Tooltip("ãƒ¦ãƒ‹ãƒƒãƒˆã®ç”Ÿå­˜ãƒ•ãƒ©ã‚°")]
     public bool is_alive { get; private set; }
-    [field: SerializeField, Tooltip("ƒ†ƒjƒbƒg‚Ì‘I‘ğƒtƒ‰ƒO")]
+    [field: SerializeField, Tooltip("ãƒ¦ãƒ‹ãƒƒãƒˆã®é¸æŠãƒ•ãƒ©ã‚°")]
     public bool is_selected { get; private set; }
-    [field: SerializeField, Tooltip("ƒ†ƒjƒbƒg‚ÌˆÚ“®Š®—¹ƒtƒ‰ƒO")]
+    [field: SerializeField, Tooltip("ãƒ¦ãƒ‹ãƒƒãƒˆã®ç§»å‹•å®Œäº†ãƒ•ãƒ©ã‚°")]
     public bool has_moved { get; private set; }
-    [field: SerializeField, Tooltip("ƒAƒCƒRƒ“‚Ì‰æ‘œ")]
+    [field: SerializeField, Tooltip("ã‚¢ã‚¤ã‚³ãƒ³ã®ç”»åƒ")]
     public Sprite icon { get; private set; }
-    [field: SerializeField, Tooltip("‘•”õ’†‚Ì•Ší")]
+    [field: SerializeField, Tooltip("è£…å‚™ä¸­ã®æ­¦å™¨")]
     public Weapon equip_weapon { get; private set; }
-    [field: SerializeField, Tooltip("Š‚µ‚Ä‚¢‚é•Ší")]
+    [field: SerializeField, Tooltip("æ‰€æŒã—ã¦ã„ã‚‹æ­¦å™¨")]
     public List<Weapon> have_weapons { get; private set; }
 
-    [field: SerializeField, Tooltip("Š‚µ‚Ä‚¢‚éƒAƒCƒeƒ€")]
+    [field: SerializeField, Tooltip("æ‰€æŒã—ã¦ã„ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ")]
     public List<Item> have_items { get; private set; }
 
-    [field: SerializeField, Tooltip("‘I‘ğ‰Â”\‚Ès“®")]
+    [field: SerializeField, Tooltip("é¸æŠå¯èƒ½ãªè¡Œå‹•")]
     public List<IUnitAction> available_actions { get; private set; }
 
-    [field: SerializeField, Tooltip("ˆÚ“®‰Â”\‚Èƒ^ƒCƒ‹")]
+    [field: SerializeField, Tooltip("ç§»å‹•å¯èƒ½ãªã‚¿ã‚¤ãƒ«")]
     public List<Tile> moveable_tiles { get; private set; }
 
-    [field: SerializeField, Tooltip("UŒ‚‰Â”\‚Èƒ^ƒCƒ‹")]
+    [field: SerializeField, Tooltip("æ”»æ’ƒå¯èƒ½ãªã‚¿ã‚¤ãƒ«")]
     public List<Weapon> in_range_tiles { get; private set; }
 
     public virtual List<Vector2Int> GetMoveableArea(Tile[,] tile_map, int map_width, int map_height)
     {
-        Debug.Log("ˆÚ“®‰Â”\‚ÈƒOƒŠƒbƒhÀ•W‚ğ•Ô‹p‚µ‚Ü‚·");
+        Debug.Log("ç§»å‹•å¯èƒ½ãªã‚°ãƒªãƒƒãƒ‰åº§æ¨™ã‚’è¿”å´ã—ã¾ã™");
         return new List<Vector2Int>();
     }
 
     /// <summary>
-    /// ƒOƒŠƒbƒhÀ•W‚ğ’¼Ú‘ã“ü
+    /// ã‚°ãƒªãƒƒãƒ‰åº§æ¨™ã‚’ç›´æ¥ä»£å…¥
     /// </summary>
     /// <param name="grid_pos">
-    /// ƒOƒŠƒbƒhÀ•W
+    /// ã‚°ãƒªãƒƒãƒ‰åº§æ¨™
     /// </param>
     public void SetGridPos(Vector2Int grid_pos)
     {
@@ -53,55 +55,55 @@ public class Unit : MonoBehaviour
 
     public void GridMove(Vector2 target_pos, Vector2Int target_grid_pos)
     {
-        Debug.Log($"À•W: {target_pos} ƒOƒŠƒbƒhÀ•W: {target_grid_pos}‚ÉˆÚ“®");
+        Debug.Log($"åº§æ¨™: {target_pos} ã‚°ãƒªãƒƒãƒ‰åº§æ¨™: {target_grid_pos}ã«ç§»å‹•");
         return;
     }
 
     public void SearchMoveableArea(Tile[,] tile_map, int map_width, int map_height)
     {
-        Debug.Log($"ˆÚ“®‰Â”\‚Èƒ}ƒX‚ğ’Tõ‚µ‚Ü‚·");
+        Debug.Log($"ç§»å‹•å¯èƒ½ãªãƒã‚¹ã‚’æ¢ç´¢ã—ã¾ã™");
         return;
     }
 
     public void SearchInRangeTiles(Tile[,] tile_map, int map_width, int map_height)
     {
-        Debug.Log($"UŒ‚‰Â”\‚Èƒ}ƒX‚ğ’Tõ‚µ‚Ü‚·");
+        Debug.Log($"æ”»æ’ƒå¯èƒ½ãªãƒã‚¹ã‚’æ¢ç´¢ã—ã¾ã™");
         return;
     }
 
     public void Select()
     {
-        Debug.Log($"ƒ†ƒjƒbƒg: {unit_name}‚ª‘I‘ğó‘Ô‚É‚È‚è‚Ü‚µ‚½");
+        Debug.Log($"ãƒ¦ãƒ‹ãƒƒãƒˆ: {unit_name}ãŒé¸æŠçŠ¶æ…‹ã«ãªã‚Šã¾ã—ãŸ");
         return;
     }
 
     public void DeSelect()
     {
-        Debug.Log($"ƒ†ƒjƒbƒg: {unit_name}‚Ì‘I‘ğó‘Ô‚ğ‰ğœ‚µ‚Ü‚·");
+        Debug.Log($"ãƒ¦ãƒ‹ãƒƒãƒˆ: {unit_name}ã®é¸æŠçŠ¶æ…‹ã‚’è§£é™¤ã—ã¾ã™");
         return;
     }
 
     public void ResetTurnState()
     {
-        Debug.Log($"ƒ†ƒjƒbƒg‚Ìó‘Ô‚ğƒ^[ƒ“ŠJn‚Ì‚à‚Ì‚É‰Šú‰»‚µ‚Ü‚·");
+        Debug.Log($"ãƒ¦ãƒ‹ãƒƒãƒˆã®çŠ¶æ…‹ã‚’ã‚¿ãƒ¼ãƒ³é–‹å§‹ã®ã‚‚ã®ã«åˆæœŸåŒ–ã—ã¾ã™");
         return;
     }
 
     public void TakeDamege(int amount)
     {
-        Debug.Log($"{amount}ƒ_ƒ[ƒW‚ğó‚¯‚Ü‚·");
+        Debug.Log($"{amount}ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’å—ã‘ã¾ã™");
         return;
     }
 
     public void Heal(int amount)
     {
-        Debug.Log($"{amount}HP‰ñ•œ‚µ‚Ü‚·");
+        Debug.Log($"{amount}HPå›å¾©ã—ã¾ã™");
         return;
     }
 
     public void UpdateAvailableActions()
     {
-        Debug.Log("‘I‘ğ‰Â”\‚Ès“®‚ğXV‚µ‚Ü‚·");
+        Debug.Log("é¸æŠå¯èƒ½ãªè¡Œå‹•ã‚’æ›´æ–°ã—ã¾ã™");
         return;
     }
 }

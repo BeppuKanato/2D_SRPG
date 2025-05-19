@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 public class UnitManager : MonoBehaviour, ISaveToJson
@@ -7,42 +7,45 @@ public class UnitManager : MonoBehaviour, ISaveToJson
     MapManager map_manager;
     [SerializeField]
     FactoryWithStringKey ally_unit_factory;
+    [SerializeField]
+    Unit selected_unit;
+
     JsonHandler json_handler = new JsonHandler();
 
     public AllyUnitSaveData[] ally_unit_data;
     public List<AllyUnit> ally_units;
 
 
-    //ƒ}ƒbƒvî•ñ(2025/5/18“_ ‰¼İ’è)
+    //ãƒãƒƒãƒ—æƒ…å ±(2025/5/18æ™‚ç‚¹ ä»®è¨­å®š)
     public MapInfo map_info;
 
     /// <summary>
-    /// ƒ†ƒjƒbƒgƒf[ƒ^‚ğƒ[ƒhA¶¬‚·‚é
+    /// ãƒ¦ãƒ‹ãƒƒãƒˆãƒ‡ãƒ¼ã‚¿ã‚’ãƒ­ãƒ¼ãƒ‰ã€ç”Ÿæˆã™ã‚‹
     /// </summary>
     public void LoadAndGenerateUnits()
     {
-        //‘Sƒ†ƒjƒbƒg‚Ìƒf[ƒ^‚ğƒ[ƒh
+        //å…¨ãƒ¦ãƒ‹ãƒƒãƒˆã®ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ­ãƒ¼ãƒ‰
         LoadFromJson();
         ally_units = ally_unit_data.Select((data, index) => InstantiateAllyUnit(data, index)).ToList();
     }
 
     /// <summary>
-    /// –¡•ûƒ†ƒjƒbƒg‚ğ¶¬‚·‚é
+    /// å‘³æ–¹ãƒ¦ãƒ‹ãƒƒãƒˆã‚’ç”Ÿæˆã™ã‚‹
     /// </summary>
     /// <param name="save_data">
-    /// ƒ†ƒjƒbƒg‚Ìƒf[ƒ^
+    /// ãƒ¦ãƒ‹ãƒƒãƒˆã®ãƒ‡ãƒ¼ã‚¿
     /// </param>
     /// <returns>
-    /// ¶¬‚µ‚½ƒ†ƒjƒbƒg
+    /// ç”Ÿæˆã—ãŸãƒ¦ãƒ‹ãƒƒãƒˆ
     /// </returns>
     private AllyUnit InstantiateAllyUnit(AllyUnitSaveData save_data, int index)
     {
         Debug.Log(index);
-        //‰ŠúˆÊ’u‚ÌƒsƒNƒZƒ‹À•W‚ğæ“¾
+        //åˆæœŸä½ç½®ã®ãƒ”ã‚¯ã‚»ãƒ«åº§æ¨™ã‚’å–å¾—
         Vector2 pixel_pos = GetPixelPosition(map_info.initial_pos_ally[index]);
         
         GameObject unit = ally_unit_factory.InstantiateFromStringKey(null, save_data.unit_id, pixel_pos, Quaternion.identity);
-        //ƒ†ƒjƒbƒg‚ÌƒvƒŒƒnƒu‚ª‚È‚©‚Á‚½ê‡
+        //ãƒ¦ãƒ‹ãƒƒãƒˆã®ãƒ—ãƒ¬ãƒãƒ–ãŒãªã‹ã£ãŸå ´åˆ
         if (unit == null)
         {
             return null;
@@ -55,13 +58,13 @@ public class UnitManager : MonoBehaviour, ISaveToJson
     }
 
     /// <summary>
-    /// ƒ^ƒCƒ‹‚ÌƒsƒNƒZƒ‹À•W‚ğ•Ô‚·
+    /// ã‚¿ã‚¤ãƒ«ã®ãƒ”ã‚¯ã‚»ãƒ«åº§æ¨™ã‚’è¿”ã™
     /// </summary>
     /// <param name="grid_pos">
-    /// ƒsƒNƒZƒ‹À•W‚ğæ“¾‚µ‚½‚¢ƒ^ƒCƒ‹‚ÌƒOƒŠƒbƒhÀ•W
+    /// ãƒ”ã‚¯ã‚»ãƒ«åº§æ¨™ã‚’å–å¾—ã—ãŸã„ã‚¿ã‚¤ãƒ«ã®ã‚°ãƒªãƒƒãƒ‰åº§æ¨™
     /// </param>
     /// <returns>
-    /// ƒsƒNƒZƒ‹À•W(Vector2)
+    /// ãƒ”ã‚¯ã‚»ãƒ«åº§æ¨™(Vector2)
     /// </returns>
     private Vector2 GetPixelPosition(Vector2Int grid_pos)
     {
@@ -75,9 +78,9 @@ public class UnitManager : MonoBehaviour, ISaveToJson
     }
 
     /// <summary>
-    /// - –¡•ûƒ†ƒjƒbƒg‚ÌƒXƒe[ƒ^ƒX
+    /// - å‘³æ–¹ãƒ¦ãƒ‹ãƒƒãƒˆã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
     /// 
-    /// ‚ğæ“¾
+    /// ã‚’å–å¾—
     /// </summary>
     public void LoadFromJson()
     {
@@ -91,5 +94,47 @@ public class UnitManager : MonoBehaviour, ISaveToJson
         }
 
         ally_unit_data = ally_unit_result.read_data.data;
+    }
+
+    /// <summary>
+    /// ã‚°ãƒªãƒƒãƒ‰åº§æ¨™ã«ãƒ¦ãƒ‹ãƒƒãƒˆãŒã„ã‚‹ã‹ã‚’è¿”ã™
+    /// 
+    /// </summary>
+    /// <param name="target_grid_pos">
+    /// æŒ‡å®šã™ã‚‹ã‚°ãƒªãƒƒãƒ‰åº§æ¨™
+    /// </param>
+    /// <returns>
+    /// åº§æ¨™ã«ãƒ¦ãƒ‹ãƒƒãƒˆãŒã„ã‚‹å ´åˆ: Unit ã„ãªã„å ´åˆ: null 
+    /// </returns>
+    public Unit GetUnitByGritPos(Vector2Int target_grid_pos)
+    {
+        foreach(AllyUnit unit in ally_units)
+        {
+            //ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã—ã¦ã„ãªã„ãƒ¦ãƒ‹ãƒƒãƒˆãŒã„ã‚‹å ´åˆã«å®Ÿè¡Œ
+            //2025/5/19 ãƒ†ã‚¹ãƒˆã®ãŸã‚ã«ä½œæˆã—ã¦ã„ã¾ã™
+            if (unit == null)
+            {
+                Debug.Log("ãƒ¦ãƒ‹ãƒƒãƒˆãƒ‡ãƒ¼ã‚¿ã«ä¸å‚™ãŒã‚ã‚Šã¾ã™");
+                continue;
+            }
+
+            if (unit.grid_pos == target_grid_pos)
+            {
+                return unit;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// é¸æŠæ¸ˆã¿ã®ãƒ¦ãƒ‹ãƒƒãƒˆã‚’è¨­å®šã™ã‚‹
+    /// </summary>
+    /// <param name="unit">
+    /// é¸æŠã—ãŸãƒ¦ãƒ‹ãƒƒãƒˆ
+    /// </param>
+    public void SetSelectedUnit(Unit unit)
+    {
+        selected_unit = unit;
     }
 }

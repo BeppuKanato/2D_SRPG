@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.InputSystem;
 public class UnitSelectProcess :MonoBehaviour ,IFieldInput
 {
@@ -14,7 +14,7 @@ public class UnitSelectProcess :MonoBehaviour ,IFieldInput
 
     public void Initialize()
     {
-        //‰¼‚ÌƒJ[ƒ\ƒ‹‰Šú‰»
+        //ä»®ã®ã‚«ãƒ¼ã‚½ãƒ«åˆæœŸåŒ–
         UpDateCursolPos(new Vector2Int(0, 0));
         SetProcesses();
     }
@@ -22,40 +22,49 @@ public class UnitSelectProcess :MonoBehaviour ,IFieldInput
     {
         input_action_handler.SetCallback("stick_move", OnNavigate);
         input_action_handler.SetCallback("pad_move", OnNavigate);
+        input_action_handler.SetCallback("decide", OnDecide);
     }
 
     /// <summary>
-    /// ƒJ[ƒ\ƒ‹ˆÚ“®ˆ—
+    /// ã‚«ãƒ¼ã‚½ãƒ«ç§»å‹•å‡¦ç†
     /// </summary>
     /// <param name="context"></param>
     public void OnNavigate(InputAction.CallbackContext context)
     {
         InputControl control = context.control;
-
+        Debug.Log(control.name);
         switch (control.name)
         {
             case "up":
+            case "upArrow":
                 UpDateCursolPos(new Vector2Int(grid_corsol_pos.x, grid_corsol_pos.y - 1));
-                Debug.Log("ã‚ÉƒXƒeƒBƒbƒN‚ğ“ü—Í");
+                Debug.Log("ä¸Šã«ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã¾ãŸã¯ã‚­ãƒ¼ã‚’å…¥åŠ›");
                 break;
             case "down":
+            case "downArrow":
                 UpDateCursolPos(new Vector2Int(grid_corsol_pos.x, grid_corsol_pos.y + 1));
-                Debug.Log("‰º‚ÉƒXƒeƒBƒbƒN‚ğ“ü—Í");
+                Debug.Log("ä¸‹ã«ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã¾ãŸã¯ã‚­ãƒ¼ã‚’å…¥åŠ›");
                 break;
             case "left":
+            case "leftArrow":
                 UpDateCursolPos(new Vector2Int(grid_corsol_pos.x - 1, grid_corsol_pos.y));
-                Debug.Log("¶‚ÉƒXƒeƒBƒbƒN‚ğ“ü—Í");
+                Debug.Log("å·¦ã«ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã¾ãŸã¯ã‚­ãƒ¼ã‚’å…¥åŠ›");
                 break;
             case "right":
+            case "rightArrow":
                 UpDateCursolPos(new Vector2Int(grid_corsol_pos.x + 1, grid_corsol_pos.y));
-                Debug.Log("‰E‚ÉƒXƒeƒBƒbƒN‚ğ“ü—Í");
+                Debug.Log("å³ã«ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã¾ãŸã¯ã‚­ãƒ¼ã‚’å…¥åŠ›");
                 break;
         }
     }
 
     public void OnDecide(InputAction.CallbackContext context)
     {
-
+        if (context.performed)
+        {
+            Unit unit = unit_manager.GetUnitByGritPos(grid_corsol_pos);
+            unit_manager.SetSelectedUnit(unit);
+        }
     }
 
     public void OnCancel(InputAction.CallbackContext context)
@@ -64,18 +73,18 @@ public class UnitSelectProcess :MonoBehaviour ,IFieldInput
     }
 
     /// <summary>
-    /// ƒJ[ƒ\ƒ‹‚ÌÀ•W‚ğXV‚·‚é
+    /// ã‚«ãƒ¼ã‚½ãƒ«ã®åº§æ¨™ã‚’æ›´æ–°ã™ã‚‹
     /// </summary>
     /// <param name="new_grid_pos"></param>
     private void UpDateCursolPos(Vector2Int new_grid_pos)
     {
-        //ˆÚ“®æ‚ÌÀ•Wæ“¾
+        //ç§»å‹•å…ˆã®åº§æ¨™å–å¾—
         Tile tile = map_manager.GetTileData(new_grid_pos);
         
-        //”ÍˆÍŠO‚¾‚Á‚½ê‡
+        //ç¯„å›²å¤–ã ã£ãŸå ´åˆ
         if (tile == null)
         {
-            Debug.Log("”ÍˆÍŠO‚Å‚·");
+            Debug.Log("ç¯„å›²å¤–ã§ã™");
             return;
         }
 

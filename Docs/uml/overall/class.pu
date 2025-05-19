@@ -26,6 +26,11 @@ enum ItemTargetType {
     TILE
 }
 
+enum UnitType {
+    ALLY
+    ENEMY
+}
+
 interface ISavaToJson {
     ..JSON形式での保存・読み込みを規定するインターフェース..
     -JsonHandler json_handler;
@@ -167,6 +172,7 @@ class WaitAction {
 
 abstract Unit {
     +string unit_name {get; private set;}
+    +UnitType unit_type {get; private set;}
     +Vector2Int pos {get; private set;}
     +UnitClassSO class {get; private set;}
     +bool is_alive {get; privaate set;}
@@ -326,9 +332,11 @@ class UnitManager {
     +UpdateRangeTiles(Tile[,] tile_map, int map_width, int map_height): void
 }
 
-class FieldInputManager {
-
+class SearchAlgorithm {
+    +AStart(): void;
 }
+
+UnitManager +-- TypeUnitPair
 
 class MapManager {
     ..マップのタイル配置や表示を管理するクラス..
