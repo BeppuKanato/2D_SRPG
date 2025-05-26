@@ -36,8 +36,11 @@ public class SearchAlgorithms
             }
         }
 
+        n_step++;
+
         foreach(TileNode node in around_node)
         {
+            OpenNode(around_node, n_step);
             Debug.Log($"周囲タイルの座標{node.tile.gameObject.transform.position}");
         }
     }
@@ -62,7 +65,7 @@ public class SearchAlgorithms
             }
             else
             {
-                c = node.c;
+                c = node.c + node.tile.move_cost;
             }
             //実コスト
             node.c = c;

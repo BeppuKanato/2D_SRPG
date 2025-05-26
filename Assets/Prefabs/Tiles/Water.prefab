@@ -103,5 +103,5 @@ MonoBehaviour:
   <tile_type>k__BackingField: 5
   <tile_name>k__BackingField: "\u6C34"
   <move_cost>k__BackingField: 2
-  <avo_increase>k__BackingField: 0
+  <avo_increase>k__BackingField: 100
   <hp_recover>k__BackingField: 0
