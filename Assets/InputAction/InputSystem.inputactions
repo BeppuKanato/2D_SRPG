@@ -176,6 +176,17 @@
                     "action": "decide",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "534088f9-5bd5-4c51-8291-0caa4e5f194a",
+                    "path": "<SwitchProControllerHID>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "decide",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

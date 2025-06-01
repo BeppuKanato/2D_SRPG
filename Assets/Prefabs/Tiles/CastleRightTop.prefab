@@ -102,6 +102,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <tile_type>k__BackingField: 102
   <tile_name>k__BackingField: "\u57CE"
-  <move_cost>k__BackingField: 0
+  <move_cost>k__BackingField: 1
   <avo_increase>k__BackingField: 0
   <hp_recover>k__BackingField: 0

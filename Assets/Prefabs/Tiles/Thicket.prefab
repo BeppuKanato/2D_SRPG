@@ -190,6 +190,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <tile_type>k__BackingField: 2
   <tile_name>k__BackingField: "\u3057\u3052\u307F"
-  <move_cost>k__BackingField: 1
+  <move_cost>k__BackingField: 2
   <avo_increase>k__BackingField: 30
   <hp_recover>k__BackingField: 0

@@ -1,134 +1,109 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using static UnityEditorInternal.ReorderableList;
-using System.IO;
+using System.Linq;
+
 public class SearchAlgorithms
 {
-    public void SearchMoveableArea(Tile[,] tile_map, int map_width, int map_height, Vector2Int start_grid_pos, int move_cost)
+    private Dictionary<Vector2Int, GridNode> node_dict = new Dictionary<Vector2Int, GridNode>();
+    private List<GridNode> searched_nodes = new List<GridNode>();
+
+    public List<GridNode> GetSearchedNodes()
     {
-        int n_step = 0;
-        //範囲探索なので、推定コストは0
-        //int default_h = 0;
-        //探索するグリッド座標
-        Vector2Int target_grid_pos = start_grid_pos;
-        Dictionary<Vector2Int, TileNode> node_dict = CreateTileNode(tile_map);
-
-        //最初のノードを探索
-        OpenNode(new List<TileNode> { node_dict[target_grid_pos] }, n_step);
-
-        List<TileNode> around_node = new List<TileNode>();
-        Vector2Int[] around_grid_pos = new Vector2Int[4]{
-            new Vector2Int(target_grid_pos.x, target_grid_pos.y + 1),
-            new Vector2Int(target_grid_pos.x, target_grid_pos.y - 1),
-            new Vector2Int(target_grid_pos.x + 1, target_grid_pos.y),
-            new Vector2Int(target_grid_pos.x - 1, target_grid_pos.y)
-        };
-
-        //周囲4マスのタイルを探索
-        foreach(Vector2Int grid_pos in around_grid_pos)
-        {
-            //グリッド座標にタイルがある場合
-            if (node_dict.ContainsKey(grid_pos))
-            {
-                around_node.Add(node_dict[grid_pos]);
-            }
-        }
-
-        n_step++;
-
-        foreach(TileNode node in around_node)
-        {
-            OpenNode(around_node, n_step);
-            Debug.Log($"周囲タイルの座標{node.tile.gameObject.transform.position}");
-        }
+        return searched_nodes;
     }
 
-    /// <summary>
-    /// ノードをOpenにする
-    /// </summary>
-    /// <param name="node_list">
-    /// Openにするノードリスト
-    /// </param>
-    private void OpenNode(List<TileNode> node_list, int n_step)
+    public List<Vector2Int> SearchMoveableArea(Tile[,] tile_map, int map_width, int map_height, Vector2Int start_grid_pos, int movable_area)
     {
-        int default_h = 0;
+        node_dict.Clear();
+        searched_nodes.Clear();
+        node_dict = CreateTileNode(tile_map);
 
-        int c;
-        foreach (TileNode node in node_list)
+        Queue<Vector2Int> open_queue = new Queue<Vector2Int>();
+        node_dict[start_grid_pos].cost_from_start = 0;
+        node_dict[start_grid_pos].is_searched = true;
+        open_queue.Enqueue(start_grid_pos);
+
+        while (open_queue.Count > 0)
         {
-            //探索開始地点
-            if (n_step == 0)
+            //キューからポップ
+            Vector2Int current_pos = open_queue.Dequeue();
+            GridNode current_node = node_dict[current_pos];
+
+            //ノードのコストが移動可能範囲を超えた場合、処理をしない
+            if (current_node.cost_from_start >= movable_area)
+                continue;
+
+            //再探索点の場合追加しない
+            if (!searched_nodes.Contains(current_node))
             {
-                c = 0;
+                searched_nodes.Add(current_node);
             }
-            else
+
+            foreach (Vector2Int neighbor_pos in GetNeighbors(current_pos))
             {
-                c = node.c + node.tile.move_cost;
+                //範囲外の場合処理しない
+                if (!node_dict.ContainsKey(neighbor_pos)) continue;
+
+                GridNode neighbor_node = node_dict[neighbor_pos];
+                //中心点までの移動コスト + 自分の移動コスト
+                int tentative_cost = current_node.cost_from_start + neighbor_node.tile.move_cost;
+
+                //未探索、または短い経路になる場合
+                if (!neighbor_node.is_searched || tentative_cost < neighbor_node.cost_from_start)
+                {
+                    Debug.Log($"{neighbor_pos}のコスト: {tentative_cost}");
+                    neighbor_node.cost_from_start = tentative_cost;
+                    neighbor_node.is_searched = true;
+                    open_queue.Enqueue(neighbor_pos);
+                }
             }
-            //実コスト
-            node.c = c;
-            //推定コスト
-            node.h = default_h;
-            //スコア
-            node.s = node.c + node.h;
-            node.node_state = NodeStateType.Open;
         }
+
+        return searched_nodes
+            .Where(node => node.cost_from_start <= movable_area)
+            .Select(node => node.grid_pos)
+            .ToList();
     }
 
-    /// <summary>
-    /// タイルのノード辞書を作成
-    /// </summary>
-    /// <param name="tile_map">
-    /// タイルの配置
-    /// </param>
-    /// <returns>
-    /// キー: グリッド座標、 バリュー: Node
-    /// </returns>
-    private Dictionary<Vector2Int, TileNode> CreateTileNode(Tile[,] tile_map)
+    private Dictionary<Vector2Int, GridNode> CreateTileNode(Tile[,] tile_map)
     {
-        Dictionary<Vector2Int, TileNode> node_list = new Dictionary<Vector2Int, TileNode>();
+        Dictionary<Vector2Int, GridNode> node_list = new Dictionary<Vector2Int, GridNode>();
+        int width = tile_map.GetLength(0);
+        int height = tile_map.GetLength(1);
 
-        //Nodeデータを作成
-        for (int y = 0; y < tile_map.GetLength(1); y++)
+        for (int y = 0; y < height; y++)
         {
-            for (int x = 0; x < tile_map.GetLength(0); x++)
+            for (int x = 0; x < width; x++)
             {
-                node_list.Add(new Vector2Int(x, y), new TileNode(
-                        NodeStateType.None,
-                        0,
-                        0,
-                        0,
-                        tile_map[x, y]
-                    ));
+                Vector2Int pos = new Vector2Int(x, y);
+                node_list[pos] = new GridNode(pos, tile_map[x, y]);
             }
         }
 
         return node_list;
     }
 
-    //ノードの探索状態
-    enum NodeStateType
+    private List<Vector2Int> GetNeighbors(Vector2Int pos)
     {
-        None,
-        Open,
-        Close,
-    }
-    class TileNode 
-    {
-        public NodeStateType node_state;
-        public int c;   //実コスト
-        public int h;   //推定コスト
-        public int s;   //スコア
-        public Tile tile;
-
-        public TileNode(NodeStateType node_state, int c, int h, int s, Tile tile)
+        return new List<Vector2Int>
         {
-            this.node_state = node_state;
-            this.c = c;
-            this.h = h;
-            this.s = s;
+            new Vector2Int(pos.x, pos.y + 1),
+            new Vector2Int(pos.x, pos.y - 1),
+            new Vector2Int(pos.x + 1, pos.y),
+            new Vector2Int(pos.x - 1, pos.y)
+        };
+    }
+
+    public class GridNode
+    {
+        public bool is_searched = false;
+        public int cost_from_start = int.MaxValue;
+        public Tile tile;
+        public Vector2Int grid_pos;
+
+        public GridNode(Vector2Int grid_pos, Tile tile)
+        {
+            this.grid_pos = grid_pos;
             this.tile = tile;
         }
     }

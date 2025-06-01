@@ -30,8 +30,8 @@ public class Unit : MonoBehaviour
     [field: SerializeField, Tooltip("選択可能な行動")]
     public List<IUnitAction> available_actions { get; private set; }
 
-    [field: SerializeField, Tooltip("移動可能なタイル")]
-    public List<Tile> moveable_tiles { get; private set; }
+    [field: SerializeField, Tooltip("移動可能なグリッド座標")]
+    public List<Vector2Int> movable_area{ get; private set; }
 
     [field: SerializeField, Tooltip("攻撃可能なタイル")]
     public List<Weapon> in_range_tiles { get; private set; }
@@ -59,12 +59,14 @@ public class Unit : MonoBehaviour
         return;
     }
 
-    public void SearchMoveableArea(Tile[,] tile_map, int map_width, int map_height)
+    public void SearchMoveableArea(Tile[,] map_tiles, int map_width, int map_height)
     {
-        Debug.Log($"移動可能なマスを探索します");
+        SearchAlgorithms search_algorithm = new SearchAlgorithms();
+        List<Vector2Int> moveable_areas = search_algorithm.SearchMoveableArea(map_tiles, map_width, map_height, grid_pos, 4);
+
+        this.movable_area = moveable_areas;
         return;
     }
-
     public void SearchInRangeTiles(Tile[,] tile_map, int map_width, int map_height)
     {
         Debug.Log($"攻撃可能なマスを探索します");

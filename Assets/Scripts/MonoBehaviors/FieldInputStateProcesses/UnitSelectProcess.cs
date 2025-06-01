@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 public class UnitSelectProcess :MonoBehaviour ,IFieldInput
 {
     [SerializeField]
@@ -67,8 +68,7 @@ public class UnitSelectProcess :MonoBehaviour ,IFieldInput
             Unit unit = unit_manager.GetUnitByGritPos(grid_corsol_pos);
             unit_manager.SetSelectedUnit(unit);
 
-            SearchAlgorithms search_algorithm = new SearchAlgorithms();
-            search_algorithm.SearchMoveableArea(map_manager.map_tiles, map_info.width, map_info.height, unit.grid_pos, 4);
+            unit.SearchMoveableArea(map_manager.map_tiles, map_info.width, map_info.height);
         }
     }
 
